@@ -1,0 +1,6 @@
+baseURL = 'https://lllama.github.io/'
+languageCode = 'en-us'
+theme = 'pickles'
+title = "Lllama's blog"
+[params]
+paginate = 10
