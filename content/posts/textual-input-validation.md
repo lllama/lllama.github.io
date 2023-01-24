@@ -7,8 +7,6 @@ categories:
 - textual-patterns
 - python
 ---
-# Valdiating Inputs in Textual
-
 [Textual](https://textual.textualize.io) has a number of built in widgets to help capture user input. For text input, there is the standard [`Input`](https://textual.textualize.io/widgets/input/) widget. By default, this will let the user enter any characters that they wish.
 
 Whenever a new value is entered, textual will fire off an `Input.Changed` event, that you can handle with an `on_input_changed` method in your `App` (or wherever). You may then be tempted to use this handler to validate the user input - the `Input` has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the `Input` from the DOM and then update the `value` attribute. This sort of fits with how you might approach it in a web app - create an `<input>` element and wire something up to its various handlers.
