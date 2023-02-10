@@ -1,7 +1,7 @@
 ---
 title: Textual Screen Transitions
 date: 2023-01-26T11:49:38Z
-draft: true
+draft: false
 categories:
 - textual
 - python
