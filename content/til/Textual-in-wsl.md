@@ -6,6 +6,7 @@ categories:
 - textual
 - python
 - wsl
+- til
 ---
 If you’re running textual apps under WSL there are two things needed to make sure they look pretty: 
 
