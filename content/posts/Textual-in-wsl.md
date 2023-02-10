@@ -1,7 +1,7 @@
 ---
 title: Textual in WSL
 date: 2023-01-27T11:52:07Z
-draft: true
+draft: false
 categories:
 - textual
 - python
