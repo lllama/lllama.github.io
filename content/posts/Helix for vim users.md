@@ -13,6 +13,6 @@ My reason for giving it a go is that I want something with easy to use language 
 
 So here are some notes about translating vim actions into helix:
 
-- Delete to end of line. 
+- Delete to end of line. This is a slightly annoying one. The idea in Helix is that you select things first and then do the action. The movement `gl` goes to the end of the line but _doesn’t_ select by default. So instead we select to the character before the newline and then delete that. 
   - Vim: `D`
   - Helix: `t<enter>d`
