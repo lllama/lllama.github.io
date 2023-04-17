@@ -1,12 +1,11 @@
 ---
 title: Sanic Custom Route Parameters
 date: 2023-01-23T12:11:33Z
-draft: true
+draft: false
 categories:
 - Sanic 
 - til
 ---
-# Sanic Custom Route Parameters
 
 Sanic supports path parameters like the majority of web frameworks. It supports a number of [built-in types](https://sanic.dev/en/guide/basics/routing.html#path-parameters) but you can define your own. 
 
