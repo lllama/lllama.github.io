@@ -12,7 +12,15 @@ My reason for giving it a go is that I want something with easy to use language 
 | 42 words
 |
 ~1 min</p></header><div class=c-article__summary>If you’re running textual apps under WSL there are two things needed to make sure they look pretty:
-make sure you’re using a good coding font with all the various Unicode characters make sure COLORTERM is set to truecolor in your environment.</div></article><nav class="c-pagination p-pagination"><div class=c-pagination__ctrl><div class=c-pagination__newer></div><div class=c-pagination__older></div></div><span class="c-pagination__count p-pagination__count">Page 1 of 1</span></nav></main><footer class=l-footer><p class=p-copyright>&nbsp;&bull;&nbsp;
+make sure you’re using a good coding font with all the various Unicode characters make sure COLORTERM is set to truecolor in your environment.</div></article><article class="c-article p-list-article"><header><h2 class="c-title c-article__title"><a href=https://lllama.github.io/posts/sanic-custom-parameters/>Sanic Custom Route Parameters</a></h2><p class=c-article__meta>Posted on
+<time datetime=2023-01-23T12:11:33Z>Jan 23, 2023</time>
+| Updated on
+<time datetime=2023-01-23T12:11:33Z>Jan 23, 2023</time>
+| 92 words
+|
+~1 min</p></header><div class=c-article__summary>Sanic supports path parameters like the majority of web frameworks. It supports a number of built-in types but you can define your own.
+Something like this from Adam on Discord:
+import re from typing import NamedTuple DIMENSIONS_PATTERN = re.compile(r"(?P&lt;width>\d+)x(?P&lt;height>\d+)") class Dimensions(NamedTuple): width: int height: int def _extract_dimensions(value: str) -> Dimensions: if match := DIMENSIONS_PATTERN.match(value): return Dimensions(**{k: int(v) for k, v in match.groupdict().items()}) raise ValueError("Not proper dimensions format") app.router.register_pattern( "dimensions", _extract_dimensions, DIMENSIONS_PATTERN ) @app.</div><a href=https://lllama.github.io/posts/sanic-custom-parameters/ class="c-article__btn p-list-article__btn">Read more</a></article><nav class="c-pagination p-pagination"><div class=c-pagination__ctrl><div class=c-pagination__newer></div><div class=c-pagination__older></div></div><span class="c-pagination__count p-pagination__count">Page 1 of 1</span></nav></main><footer class=l-footer><p class=p-copyright>&nbsp;&bull;&nbsp;
 2023
 &nbsp;&bull;&nbsp;
 <a href=https://lllama.github.io/>Lllama's blog</a></p></footer><script type=text/javascript src=https://lllama.github.io/js/bundle.js defer></script></body></html>

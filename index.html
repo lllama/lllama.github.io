@@ -41,7 +41,15 @@ The URLs for these are fairly basic:
 | 401 words
 |
 ~2 mins</p></header><div class=c-article__summary>Textual has a number of built in widgets to help capture user input. For text input, there is the standard Input widget. By default, this will let the user enter any characters that they wish.
-Whenever a new value is entered, textual will fire off an Input.Changed event, that you can handle with an on_input_changed method in your App (or wherever). You may then be tempted to use this handler to validate the user input - the Input has a reactive variable but there’s no easy way to wire something up to an instance’s methods.</div><a href=https://lllama.github.io/posts/textual-input-validation/ class="c-article__btn p-list-article__btn">Read more</a></article><article class="c-article p-list-article"><header><h2 class="c-title c-article__title"><a href=https://lllama.github.io/posts/deploy-python-with-deb/>Deploy Python With Deb</a></h2><p class=c-article__meta>Posted on
+Whenever a new value is entered, textual will fire off an Input.Changed event, that you can handle with an on_input_changed method in your App (or wherever). You may then be tempted to use this handler to validate the user input - the Input has a reactive variable but there’s no easy way to wire something up to an instance’s methods.</div><a href=https://lllama.github.io/posts/textual-input-validation/ class="c-article__btn p-list-article__btn">Read more</a></article><article class="c-article p-list-article"><header><h2 class="c-title c-article__title"><a href=https://lllama.github.io/posts/sanic-custom-parameters/>Sanic Custom Route Parameters</a></h2><p class=c-article__meta>Posted on
+<time datetime=2023-01-23T12:11:33Z>Jan 23, 2023</time>
+| Updated on
+<time datetime=2023-01-23T12:11:33Z>Jan 23, 2023</time>
+| 92 words
+|
+~1 min</p></header><div class=c-article__summary>Sanic supports path parameters like the majority of web frameworks. It supports a number of built-in types but you can define your own.
+Something like this from Adam on Discord:
+import re from typing import NamedTuple DIMENSIONS_PATTERN = re.compile(r"(?P&lt;width>\d+)x(?P&lt;height>\d+)") class Dimensions(NamedTuple): width: int height: int def _extract_dimensions(value: str) -> Dimensions: if match := DIMENSIONS_PATTERN.match(value): return Dimensions(**{k: int(v) for k, v in match.groupdict().items()}) raise ValueError("Not proper dimensions format") app.router.register_pattern( "dimensions", _extract_dimensions, DIMENSIONS_PATTERN ) @app.</div><a href=https://lllama.github.io/posts/sanic-custom-parameters/ class="c-article__btn p-list-article__btn">Read more</a></article><article class="c-article p-list-article"><header><h2 class="c-title c-article__title"><a href=https://lllama.github.io/posts/deploy-python-with-deb/>Deploy Python With Deb</a></h2><p class=c-article__meta>Posted on
 <time datetime=2022-07-19T12:28:33+01:00>Jul 19, 2022</time>
 | Updated on
 <time datetime=2022-07-19T12:28:33+01:00>Jul 19, 2022</time>
