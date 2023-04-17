@@ -1,7 +1,7 @@
 ---
 title: Helix for vim users
 date: 2023-04-17T08:43:21+01:00
-draft: true
+draft: false
 categories:
 - til
 - helix
