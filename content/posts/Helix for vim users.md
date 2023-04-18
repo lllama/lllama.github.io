@@ -16,3 +16,14 @@ So here are some notes about translating vim actions into helix:
 - Delete to end of line. This is a slightly annoying one. The idea in Helix is that you select things first and then do the action. The movement `gl` goes to the end of the line but _doesn’t_ select by default. So instead we select to the character before the newline and then delete that. 
   - Vim: `D`
   - Helix: `t<enter>d`
+
+
+## Python tips
+
+You’ll need to install the [python language server](https://github.com/python-lsp/python-lsp-server) to get python support. I recommend [`pipx`](https://pypa.github.io/pipx/) - it’ll install it into its own virtual environment and put it on your path. Helix should then pick it up. 
+
+I also prefer [`black`](https://black.readthedocs.io/en/stable/index.html) for formatting, which needs to have its LSP plugin installed using 
+
+```pipx inject python-lsp-server python-lsp-black```
+
+That will install the plugin into the virtual environment used by the LSP.
