@@ -43,7 +43,7 @@ So obviously there’s some content to be found in there, so time to have a peek
 
 ## Request Hunting
 Opening the file and searching for our request to Google finds the following:
-![image](.attachments/c097ab5662532f7d6796d2bcdc6d7b8e77ddd2b0.png)
+![image](.attachments/e8c5c5b4a81dc9cc92d6346eaf7b5c566a46f605.png)
 
 Here we can see the request, which is then followed by the response. Looking at the bytes prior to the string `GET`, we see:
 ```
