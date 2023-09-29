@@ -53,4 +53,6 @@ The two four-byte values are 104 and 96 in decimal, and 96 just happens to be th
 ```
 00 00 5B BC 00 00 5B B4
 ```
-And `5B B4` is 23,476, which is the length of the response. So we have 
+And `5B B4` is 23,476, which is the length of the response. So we have the requests and responses next to each other, and a way to know how much to read from the file.
+
+My next idea is to see whether there are any pointers to these locations within the file. 
