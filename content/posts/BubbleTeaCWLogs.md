@@ -67,9 +67,109 @@ The above will attempt to log into AWS and get all the log groups from the `eu-w
 
 Next we'll add a sprinkling of BubbleTea to let the user pick which group they want to look at.
 
-BubbleTea uses the [Elm Architecture](https://guide.elm-lang.org/architecture/) (for better or worse[^2]), which means that we need a Model representing our application's state, an Update function that will mutate the model (if needed), and a View function that will draw the screen.
+BubbleTea uses the [Elm Architecture](https://guide.elm-lang.org/architecture/) (for better or worse[^2]), which means that we need a Model representing our application's state, an `Init` function to perform initialisation, an `Update` function that will mutate the model (if needed), and a `View` function that will draw the screen.
 
-The following is a basic example 
+The following is a basic example that displays our list of log groups using BubbleTea.
+
+First we need to define a model:
+
+```go
+type model struct {
+    logGroups []string{}
+}
+```
+
+Then the `Init`, `Update` and `View` functions:
+
+```go
+func (m model) Init() tea.Cmd {
+    return nil
+}
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+    return m, nil
+}
+
+func (m model) View() string {
+    return strings.Join(m.logGroups, "\n")
+}
+```
+
+We then need to update our `main` function to use BubbleTea:
+
+```go
+func main() {
+
+    // Create an empty model
+	model := model{}
+
+    config, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("eu-west-1"))
+	if err != nil {
+		log.Fatalf("failed to load configuration, %v", err)
+	}
+
+	sts_client := sts.NewFromConfig(config)
+
+	_, err = sts_client.GetCallerIdentity(context.Background(), &sts.GetCallerIdentityInput{})
+	if err != nil {
+		fmt.Println(errorStyle.Render(fmt.Sprintf("Bad AWS Credentials: %v ", err)))
+		return
+	}
+
+	client := cloudwatchlogs.NewFromConfig(config)
+
+	paginator := cloudwatchlogs.NewDescribeLogGroupsPaginator(client, &cloudwatchlogs.DescribeLogGroupsInput{})
+
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(context.Background())
+		if err != nil {
+			log.Fatalf("failed to list log groups, %v", err)
+		}
+		for _, logGroup := range output.LogGroups {
+            model.logGroups = append(model.logGroups, string(*logGroup.LogGroupName))
+		}
+	}
+
+    // Now create our BubbleTea program
+	btProg := tea.NewProgram(model)
+
+	if _, err := btProg.Run(); err != nil {
+		log.Fatalf("failed to start program, %v", err)
+	}
+}
+```
+
+This is a very simple example of a BubbleTea app ***BUT DON'T RUN IT!***
+
+BubbleTea requires you to do most/every thing yourself and in this case, it requires you to provide a way to quit the application. If you run the above code, then the app will display the list of log groups but then sit there waiting for input. You'll have to kill it from a separate terminal window to make it quit. To provide a way to handle quitting, we need to change our `Update` function:
+
+```go
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+    switch msg := msg.(type) {
+
+        case tea.KeyMsg:
+        switch msg.String() {
+
+        case "ctrl+c", "q":
+            return m, tea.Quit
+        }
+    }
+    return m, nil
+}
+```
+The `Update` function now checks the type of the message passed to it and, if it's a `KeyMsg`, it quits the app if the user pressed `q` or `ctrl-c`. Running this app will now print the list of log groups and wait for the user to quit the app.
+
+I'm a big fan of Textual and it creates full screen apps, so let's do a little tweak to run this app full screen. Change the call to `NewProgram` to have the `tea.WithAltScreen()` option:
+
+```go
+	btProg := tea.NewProgram(model, tea.WithAltScreen())
+	if _, err := btProg.Run(); err != nil {
+		log.Fatalf("failed to start program, %v", err)
+	}
+```
+
+
 
 [^1]: Turns out this is easily fixed with `pipx inject awslogs setuptools` but let's not let that spoil things.
 
