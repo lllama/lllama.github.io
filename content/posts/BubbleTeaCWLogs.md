@@ -169,7 +169,18 @@ I'm a big fan of Textual and it creates full screen apps, so let's do a little t
 	}
 ```
 
+Now we want the ability to have a user select a log group to view. The bare-bones approach to this with BubbleTea is to alter our model to track the user's selection. We'll need to update the model to something like:
 
+```go
+type model struct {
+    logGroups []string
+    cursor    int
+}
+```
+
+And then we change the `Update` function to handle key presses for navigation (e.g. `up`, `down`, `j`, `k`, etc) and use the cursor field in the model to display an indicator in our `View` function. But that's a lot of work, and we'll need to handle things like reaching the top and bottom of the list, pagination if we have a lot of log groups, and various other display issues.
+
+Thankfully, BubbleTea comes with [Bubbles](https://github.com/charmbracelet/bubbles/). These are ready-made components that you can add to your app. For our use case, we'll want to use the [`List`](https://github.com/charmbracelet/bubbles/?tab=readme-ov-file#list) component.
 
 [^1]: Turns out this is easily fixed with `pipx inject awslogs setuptools` but let's not let that spoil things.
 
