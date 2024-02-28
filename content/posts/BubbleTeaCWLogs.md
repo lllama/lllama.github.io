@@ -302,6 +302,33 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 ```
 
+If we run the app, we'll get a full screen with a tiny list. You'll also see the help text, and you can use `/` to turn on the filter function and filter the items in the list. One bug is that if we try and filter the list to any items that contain the letter `q`... the app will quit. This is because our `Update` function checks for the key first, and quits the app before we call `Update` on the list.
+
+To fix this, we need to check the state of the `list`'s filtering feature:
+
+```go
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var (
+		cmd tea.Cmd
+	)
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		// If we're not filtering then we can add our own logic
+		if !(m.logGroups.FilterState() == list.Filtering) {
+			switch msg.String() {
+
+			case "q", "ctrl+c":
+				return m, tea.Quit
+			}
+		}
+	}
+	m.logGroups, cmd = m.logGroups.Update(msg)
+
+	return m, cmd
+}
+```
+
 [^1]: Turns out this is easily fixed with `pipx inject awslogs setuptools` but let's not let that spoil things.
 
 [^2]: The Elm architecture makes sense - it's a nice way of adding some rigour to UIs. One _very key_ difference between Elm and BubbleTea, however, is that Elm has a whole browser sitting underneath it. That means it's very easy to attach handlers etc to DOM elements and have them pass messages to Elm. BubbleTea does not have this and the user is responsible for everything that the browser would do. You'll need to handle tabbing between elements, "focus" of controls, and even things like hit detection for mouse events. That's a lot of work.
