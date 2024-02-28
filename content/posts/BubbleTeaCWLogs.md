@@ -182,6 +182,126 @@ And then we change the `Update` function to handle key presses for navigation (e
 
 Thankfully, BubbleTea comes with [Bubbles](https://github.com/charmbracelet/bubbles/). These are ready-made components that you can add to your app. For our use case, we'll want to use the [`List`](https://github.com/charmbracelet/bubbles/?tab=readme-ov-file#list) component.
 
+First we'll need to update the model to use the `list` bubble's internal model:
+
+```go
+type model struct {
+	logGroups list.Model
+}
+```
+
+The list's model expects item's to be added to it that match the `list.Item` interface, so let's define a type that does just that:
+
+```go
+type item string
+func (i item) FilterValue() string { return "" }
+```
+
+(The `list` bubble let's you filter the list, so the component needs to know what value to apply the filter to. At the moment, we're not supporting filtering, so we just return an empty string.)
+
+The rendering of each list item is handled by an `ItemDelegate`. We can use the `DefaultItemDelegate` that is provided by the `list` package but this requires that our list item'#]'s have a title and a description, which is more than what we need for our simple display, so we'll create our own delegate instead.
+
+```go
+type itemDelegate struct{}
+func (d itemDelegate) Height() int                             { return 1 }
+func (d itemDelegate) Spacing() int                            { return 0 }
+func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
+func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(item)
+	if !ok {
+		return
+	}
+
+	str := fmt.Sprintf("%d. %s", index+1, i)
+
+	if index == m.Index() {
+		str = "> " + str
+	} else {
+		str = "  " + str
+	}
+
+	fmt.Fprint(w, fn(str))
+}
+```
+The `ItemDelegate` interface requires us to have `Height`, `Spacing`, `Render`, and `Update` methods on our struct. Here you can see that the `Render` method is doing most of the work. We check if the index of the selection is the same as the index of the item being rendered, and put a `>` indicator if so.
+
+We then need to change our `main` function to construct the list of `list.Item`s and to set up the model to use our delegate:
+
+```go
+func main() {
+
+	// Create the model with an empty list of items that uses our delegate.
+	// The `20` is the list width and the `10` is the list height. Note that this
+	// height is the total height of the list bubble, which includes help text,
+	// title, filter text, and the items.
+	model := model{logGroups: list.New([]list.Item{}, itemDelegate{}, 20, 10)}
+
+
+    config, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("eu-west-1"))
+	if err != nil {
+		log.Fatalf("failed to load configuration, %v", err)
+	}
+
+	sts_client := sts.NewFromConfig(config)
+
+	_, err = sts_client.GetCallerIdentity(context.Background(), &sts.GetCallerIdentityInput{})
+	if err != nil {
+		fmt.Println(errorStyle.Render(fmt.Sprintf("Bad AWS Credentials: %v ", err)))
+		return
+	}
+
+	client := cloudwatchlogs.NewFromConfig(config)
+
+	paginator := cloudwatchlogs.NewDescribeLogGroupsPaginator(client, &cloudwatchlogs.DescribeLogGroupsInput{})
+
+
+	// Create a slice of items
+	groups := []list.Item{}
+
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(context.Background())
+		if err != nil {
+			log.Fatalf("failed to list log groups, %v", err)
+		}
+		for _, logGroup := range output.LogGroups {
+			// Add the items to the list
+			groups = append(groups, item(string(*logGroup.LogGroupName)))
+		}
+	}
+
+	// Update the model
+	model.logGroups.SetItems(groups)
+
+	btProg := tea.NewProgram(model, tea.WithAltScreen())
+
+	if _, err := btProg.Run(); err != nil {
+		log.Fatalf("failed to start program, %v", err)
+	}
+}
+```
+
+We then need to change our `Update` method. We need to handle what we need to handle (quitting etc) and then pass the message to the `list`'s model to do its updates:
+
+```go
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var (
+		cmd tea.Cmd
+	)
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+
+		case "q", "ctrl+c":
+			return m, tea.Quit
+		}
+	}
+	m.logGroups, cmd = m.logGroups.Update(msg)
+
+	return m, cmd
+}
+```
+
 [^1]: Turns out this is easily fixed with `pipx inject awslogs setuptools` but let's not let that spoil things.
 
 [^2]: The Elm architecture makes sense - it's a nice way of adding some rigour to UIs. One _very key_ difference between Elm and BubbleTea, however, is that Elm has a whole browser sitting underneath it. That means it's very easy to attach handlers etc to DOM elements and have them pass messages to Elm. BubbleTea does not have this and the user is responsible for everything that the browser would do. You'll need to handle tabbing between elements, "focus" of controls, and even things like hit detection for mouse events. That's a lot of work.
