@@ -199,7 +199,7 @@ func (i item) FilterValue() string { return "" }
 
 (The `list` bubble let's you filter the list, so the component needs to know what value to apply the filter to. At the moment, we're not supporting filtering, so we just return an empty string.)
 
-The rendering of each list item is handled by an `ItemDelegate`. We can use the `DefaultItemDelegate` that is provided by the `list` package but this requires that our list item'#]'s have a title and a description, which is more than what we need for our simple display, so we'll create our own delegate instead.
+The rendering of each list item is handled by an `ItemDelegate`. We can use the `DefaultItemDelegate` that is provided by the `list` package but this requires that our list `item`'s have a title and a description, which is more than what we need for our simple display, so we'll create our own delegate instead.
 
 ```go
 type itemDelegate struct{}
