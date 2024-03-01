@@ -302,7 +302,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 ```
 
-If we run the app, we'll get a full screen with a tiny list. You'll also see the help text, and you can use `/` to turn on the filter function and filter the items in the list. One bug is that if we try and filter the list to any items that contain the letter `q`... the app will quit. This is because our `Update` function checks for the key first, and quits the app before we call `Update` on the list.
+If we run the app, we'll get a full screen with a tiny list. You'll also see the help text, and you can use `/` to turn on the filter function and filter the items in the list. One bug is that if we try and filter the list to any items that contain the letter `q` then the app will quit. This is because our `Update` function checks for the key first, and quits the app before we call `Update` on the list.
 
 To fix this, we need to check the state of the `list`'s filtering feature:
 
@@ -328,6 +328,40 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 ```
+
+Now we have a way to get our list and display it but we're wasting a lot of screen space by limiting ourselves to only 10 lines. So let's look at using the whole screen.
+
+Whenever the terminal is resized, BubbleTea will send your app a `WindowSizeMsg` message. So we need to handle this in our `Update` function:
+
+```go
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var (
+		cmd tea.Cmd
+	)
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if !(m.logGroups.FilterState() == list.Filtering) {
+			switch msg.String() {
+
+			case "q", "ctrl+c":
+				return m, tea.Quit
+			}
+		}
+	// Handle resizing
+	case tea.WindowSizeMsg:
+		m.logGroups.SetWidth(msg.Width)
+		m.logGroups.SetHeight(msg.Height)
+	}
+	m.logGroups, cmd = m.logGroups.Update(msg)
+
+	return m, cmd
+}
+```
+
+Now when the terminal is resized, our list will adapt.
+
+
 
 [^1]: Turns out this is easily fixed with `pipx inject awslogs setuptools` but let's not let that spoil things.
 
