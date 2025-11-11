@@ -7,6 +7,14 @@ categories:
 - helix
 - vim
 ---
+
+# Update
+
+Once again, it appears that what I really want is to just change my Vim colourscheme, rather than switching to a new editor. Though I'll admit that I'm liking Zed a lot these days.
+
+<hr/>
+
+
 Periodically, I have a go at using an editor other than vim. This normally results in me realising that I just needed a change of vim colour scheme but I’ve just discovered [Helix](https://helix-editor.com/) which might be just enough like vim for me to stick around. 
 
 My reason for giving it a go is that I want something with easy to use language server support. Neovim would probably be a sensible choice but helix seems to be nicely configured out of the box, so I’m going to try that first. 

@@ -1,7 +1,7 @@
 ---
 title: Exploring Burp Project Files
 date: 2023-09-28T20:52:54+01:00
-draft: false
+draft: true
 categories:
 - burp
 - reversing
