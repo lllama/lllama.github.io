@@ -39,14 +39,6 @@
   <!-- Hugo Version Number -->
   {{ hugo.Generator -}}
 
-  {{ if not .Site.IsServer }}
-  {{ if hasPrefix .Site.GoogleAnalytics "G-"}}
-    {{ template "_internal/google_analytics.html" . }}
-  {{ else }}
-    {{ template "_internal/google_analytics_async.html" . }}
-  {{ end }}
-  {{ end }}
-
   <link rel="stylesheet" href="{{ .Site.BaseURL }}css/style.css" />
   <!-- Custom css files as define in config.toml -->
   {{ range ($.Param "custom_css") -}}
