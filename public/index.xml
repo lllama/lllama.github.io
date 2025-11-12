@@ -2,19 +2,81 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Lllama&#39;s blog</title>
-    <link>https://lllama.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Lllama&#39;s blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 19 Jul 2022 12:28:33 +0100</lastBuildDate><atom:link href="https://lllama.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <generator>Hugo</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 11 Nov 2025 21:00:33 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A collection of Datastar tips and tricks</title>
+      <link>http://localhost:1313/posts/datastartips/</link>
+      <pubDate>Tue, 11 Nov 2025 21:00:33 +0000</pubDate>
+      <guid>http://localhost:1313/posts/datastartips/</guid>
+      <description>&lt;p&gt;Some tips and tricks for &lt;a href=&#34;https://data-star.dev/&#34;&gt;Datastar&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;h1 id=&#34;building-the-project&#34;&gt;Building the project&lt;/h1&gt;&#xA;&lt;p&gt;The project is developed in a private repo and then a public cut of the code is pushed to the public repo. Bundles of the code are also published but there are no instructions on how to actually build it yourself. Until now!&lt;/p&gt;&#xA;&lt;p&gt;Run the following from within the &lt;code&gt;library/&lt;/code&gt; directory of the repo:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npx esbuild --bundle src/bundles/datastar.ts &lt;span style=&#34;color:#ae81ff&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;            --outdir&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;../bundles/ &lt;span style=&#34;color:#ae81ff&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;            --minify --sourcemap &lt;span style=&#34;color:#ae81ff&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;            --target&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;es2023 &lt;span style=&#34;color:#ae81ff&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;            --format&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;esm&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That should produce a bundle in the top level &lt;code&gt;bundles&lt;/code&gt; directory. Repeat with the other files in the &lt;code&gt;library/src/bundles/&lt;/code&gt; dir for all builds. Use the &lt;code&gt;--define ALIAS=...&lt;/code&gt; flag to change the alias prefix.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>A BubbleTea App to View CloudWatch Logs</title>
+      <link>http://localhost:1313/posts/bubbleteacwlogs/</link>
+      <pubDate>Tue, 27 Feb 2024 10:00:33 +0000</pubDate>
+      <guid>http://localhost:1313/posts/bubbleteacwlogs/</guid>
+      <description>&lt;p&gt;My favourite way to view CloudWatch logs is with the &lt;a href=&#34;https://github.com/jorgebastida/awslogs&#34;&gt;awslogs&lt;/a&gt; tool. Unfortunately, when I last installed it with &lt;a href=&#34;https://github.com/pypa/pipx&#34;&gt;&lt;code&gt;pipx&lt;/code&gt;&lt;/a&gt; it gave me errors about missing packages&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, so I decided to do what any sane person would do and write a new version in a completely different programming language.&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;m a big fan of python&amp;rsquo;s &lt;a href=&#34;https://textual.textualize.io/&#34;&gt;Textual&lt;/a&gt; library and TUIs in general, and I want 2024 to be my year of learning Go, so I&amp;rsquo;ve decided to look at using that along with &lt;a href=&#34;https://github.com/charmbracelet/bubbletea&#34;&gt;BubbleTea&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>sanic-kit</title>
+      <link>http://localhost:1313/posts/sanic-kit/</link>
+      <pubDate>Mon, 17 Apr 2023 20:35:00 +0100</pubDate>
+      <guid>http://localhost:1313/posts/sanic-kit/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://htmx.org/&#34;&gt;HTMx&lt;/a&gt; has been a revelation for writing web apps. I’d previously used my preferred DERP stack (Django, Ember, REST framework, postgresql) which produced nice enough apps but took a lot of effort and had  lots of redundant code: Postgres tables needed to be Django models, which needed to be DRF serialisers, which needed Ember Data models, and then finally rendered to the DOM.&lt;/p&gt;&#xA;&lt;p&gt;Writing with htmx meant I could have most of the shiny but I only need to produce the html on the server.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Helix for vim users</title>
+      <link>http://localhost:1313/posts/helix-for-vim-users/</link>
+      <pubDate>Mon, 17 Apr 2023 08:43:21 +0100</pubDate>
+      <guid>http://localhost:1313/posts/helix-for-vim-users/</guid>
+      <description>&lt;h1 id=&#34;update&#34;&gt;Update&lt;/h1&gt;&#xA;&lt;p&gt;Once again, it appears that what I really want is to just change my Vim colourscheme, rather than switching to a new editor. Though I&amp;rsquo;ll admit that I&amp;rsquo;m liking Zed a lot these days.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;Periodically, I have a go at using an editor other than vim. This normally results in me realising that I just needed a change of vim colour scheme but I’ve just discovered &lt;a href=&#34;https://helix-editor.com/&#34;&gt;Helix&lt;/a&gt; which might be just enough like vim for me to stick around.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Textual in WSL</title>
+      <link>http://localhost:1313/posts/textual-in-wsl/</link>
+      <pubDate>Fri, 27 Jan 2023 11:52:07 +0000</pubDate>
+      <guid>http://localhost:1313/posts/textual-in-wsl/</guid>
+      <description>&lt;p&gt;If you’re running textual apps under WSL there are two things needed to make sure they look pretty:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;make sure you’re using a good coding font with all the various Unicode characters&lt;/li&gt;&#xA;&lt;li&gt;make sure &lt;code&gt;COLORTERM&lt;/code&gt; is set to &lt;code&gt;truecolor&lt;/code&gt; in your environment.&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+    </item>
+    <item>
+      <title>Textual Screen Transitions</title>
+      <link>http://localhost:1313/posts/textual-screen-transitions/</link>
+      <pubDate>Thu, 26 Jan 2023 11:49:38 +0000</pubDate>
+      <guid>http://localhost:1313/posts/textual-screen-transitions/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://textual.textualize.io&#34;&gt;Textual&lt;/a&gt; brings a little bit of the web to the terminal. Apps have a DOM that is composed of widgets, and layout and styling is all handled with CSS.&lt;/p&gt;&#xA;&lt;p&gt;Apps can also be made up of multiple &lt;a href=&#34;https://textual.textualize.io/guide/screens/&#34;&gt;Screens&lt;/a&gt;, which could be thought of as separate URLs or pages within a web-app. With this in mind, I started wondering about whether it would be possible to animate a transition between two different screens.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>URLs are harder than they should be</title>
+      <link>http://localhost:1313/posts/urls-suck/</link>
+      <pubDate>Tue, 24 Jan 2023 16:13:28 +0000</pubDate>
+      <guid>http://localhost:1313/posts/urls-suck/</guid>
+      <description>&lt;p&gt;My current toy web-app is a webmail client. It provides the standard inbox view and then let’s you drill down to view actual mails. I also then have actions you can perform on these.&lt;/p&gt;&#xA;&lt;p&gt;The URLs for these are fairly basic:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;/mailbox/&amp;lt;ID&amp;gt;&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/mailbox/&amp;lt;ID&amp;gt;/&amp;lt;mail ID&amp;gt;&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/mailbox/&amp;lt;ID&amp;gt;/&amp;lt;mail ID&amp;gt;/delete&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;So far, so whatever. The pain comes with how to construct the drill down urls from the current page. I can get the current URL in my templates with &lt;code&gt;request.url&lt;/code&gt; and then append &lt;code&gt;/whatever&lt;/code&gt;. This works until I have a link with a trailing slash. Then my urls end up with double slashes and Sanic responds with a 404.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Validating Input in Textual</title>
+      <link>http://localhost:1313/posts/textual-input-validation/</link>
+      <pubDate>Tue, 24 Jan 2023 15:05:09 +0000</pubDate>
+      <guid>http://localhost:1313/posts/textual-input-validation/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://textual.textualize.io&#34;&gt;Textual&lt;/a&gt; has a number of built in widgets to help capture user input. For text input, there is the standard &lt;a href=&#34;https://textual.textualize.io/widgets/input/&#34;&gt;&lt;code&gt;Input&lt;/code&gt;&lt;/a&gt; widget. By default, this will let the user enter any characters that they wish.&lt;/p&gt;&#xA;&lt;p&gt;Whenever a new value is entered, textual will fire off an &lt;code&gt;Input.Changed&lt;/code&gt; event, that you can handle with an &lt;code&gt;on_input_changed&lt;/code&gt; method in your &lt;code&gt;App&lt;/code&gt; (or wherever). You may then be tempted to use this handler to validate the user input - the &lt;code&gt;Input&lt;/code&gt; has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the &lt;code&gt;Input&lt;/code&gt; from the DOM and then update the &lt;code&gt;value&lt;/code&gt; attribute. This sort of fits with how you might approach it in a web app - create an &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element and wire something up to its various handlers.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Sanic Custom Route Parameters</title>
+      <link>http://localhost:1313/posts/sanic-custom-parameters/</link>
+      <pubDate>Mon, 23 Jan 2023 12:11:33 +0000</pubDate>
+      <guid>http://localhost:1313/posts/sanic-custom-parameters/</guid>
+      <description>&lt;p&gt;Sanic supports path parameters like the majority of web frameworks. It supports a number of &lt;a href=&#34;https://sanic.dev/en/guide/basics/routing.html#path-parameters&#34;&gt;built-in types&lt;/a&gt; but you can define your own.&lt;/p&gt;&#xA;&lt;p&gt;Something like this from Adam on Discord:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; re&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; typing &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; NamedTuple&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DIMENSIONS_PATTERN &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; re&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;compile(&lt;span style=&#34;color:#e6db74&#34;&gt;r&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;(?P&amp;lt;width&amp;gt;\d+)x(?P&amp;lt;height&amp;gt;\d+)&amp;#34;&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Dimensions&lt;/span&gt;(NamedTuple):&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    width: int&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    height: int&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_extract_dimensions&lt;/span&gt;(value: str) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Dimensions:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; DIMENSIONS_PATTERN&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;match&lt;/span&gt;(value):&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Dimensions(&lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;{k: int(v) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; k, v &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;match&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupdict()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;items()})&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ValueError&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Not proper dimensions format&amp;#34;&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;app&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;router&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;register_pattern(&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dimensions&amp;#34;&lt;/span&gt;, _extract_dimensions, DIMENSIONS_PATTERN&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/&amp;lt;dimensions:dimensions&amp;gt;/colors/&amp;lt;hex:ext&amp;gt;&amp;#34;&lt;/span&gt;)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;handler&lt;/span&gt;(&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    request: Request, dimensions: Dimensions, hex: str, ext: str&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;):&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; json({&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dimensions&amp;#34;&lt;/span&gt;: dimensions, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hex&amp;#34;&lt;/span&gt;: hex, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ext&amp;#34;&lt;/span&gt;: ext})&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     <item>
       <title>Deploy Python With Deb</title>
-      <link>https://lllama.github.io/posts/deploy-python-with-deb/</link>
+      <link>http://localhost:1313/posts/deploy-python-with-deb/</link>
       <pubDate>Tue, 19 Jul 2022 12:28:33 +0100</pubDate>
-      
-      <guid>https://lllama.github.io/posts/deploy-python-with-deb/</guid>
-      <description></description>
+      <guid>http://localhost:1313/posts/deploy-python-with-deb/</guid>
+      <description>&lt;p&gt;One of the worst parts about working with python is how to share your code, or&#xA;deploy it on another machine. If you&amp;rsquo;re following preferred practices, then&#xA;you&amp;rsquo;re probably developing using a virtual environment. But that means you need&#xA;a way to have the same environment where your app is going to run. Either your&#xA;users need to go through several steps to create a virtual environment and then&#xA;install your app and its dependencies to it, or you need to ship the&#xA;environment along with your app. Or you start having to use containers.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

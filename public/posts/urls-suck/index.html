@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>URLs are harder than they should be // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="URLs are harder than they should be">
+  <meta name="twitter:description" content="My current toy web-app is a webmail client. It provides the standard inbox view and then let’s you drill down to view actual mails. I also then have actions you can perform on these.
+The URLs for these are fairly basic:
+/mailbox/&lt;ID&gt; /mailbox/&lt;ID&gt;/&lt;mail ID&gt; /mailbox/&lt;ID&gt;/&lt;mail ID&gt;/delete So far, so whatever. The pain comes with how to construct the drill down urls from the current page. I can get the current URL in my templates with request.url and then append /whatever. This works until I have a link with a trailing slash. Then my urls end up with double slashes and Sanic responds with a 404.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/urls-suck/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="URLs are harder than they should be">
+  <meta property="og:description" content="My current toy web-app is a webmail client. It provides the standard inbox view and then let’s you drill down to view actual mails. I also then have actions you can perform on these.
+The URLs for these are fairly basic:
+/mailbox/&lt;ID&gt; /mailbox/&lt;ID&gt;/&lt;mail ID&gt; /mailbox/&lt;ID&gt;/&lt;mail ID&gt;/delete So far, so whatever. The pain comes with how to construct the drill down urls from the current page. I can get the current URL in my templates with request.url and then append /whatever. This works until I have a link with a trailing slash. Then my urls end up with double slashes and Sanic responds with a 404.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-01-24T16:13:28+00:00">
+    <meta property="article:modified_time" content="2023-01-24T16:13:28+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">URLs are harder than they should be</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Jan 24, 2023
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          1 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>My current toy web-app is a webmail client. It provides the standard inbox view and then let’s you drill down to view actual mails. I also then have actions you can perform on these.</p>
+<p>The URLs for these are fairly basic:</p>
+<ul>
+<li><code>/mailbox/&lt;ID&gt;</code></li>
+<li><code>/mailbox/&lt;ID&gt;/&lt;mail ID&gt;</code></li>
+<li><code>/mailbox/&lt;ID&gt;/&lt;mail ID&gt;/delete</code></li>
+</ul>
+<p>So far, so whatever. The pain comes with how to construct the drill down urls from the current page. I can get the current URL in my templates with <code>request.url</code> and then append <code>/whatever</code>. This works until I have a link with a trailing slash. Then my urls end up with double slashes and Sanic responds with a 404.</p>
+<p>By default, Sanic will treat urls with and without trailing slashes as the same URL, so one option would be to use the <code>strict_slashes</code> option and prevent the trailing version from working. But then you get extra errors to deal with or redirects to code.</p>
+<p>The answer is to punt the URL construction to the router. Use <code>app.url_for</code> or <code>request.url_for</code> and have it create the full URL for you. Seems obvious but took me longer than it should have.</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

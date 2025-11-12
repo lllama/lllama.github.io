@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>Validating Input in Textual // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Validating Input in Textual">
+  <meta name="twitter:description" content="Textual has a number of built in widgets to help capture user input. For text input, there is the standard Input widget. By default, this will let the user enter any characters that they wish.
+Whenever a new value is entered, textual will fire off an Input.Changed event, that you can handle with an on_input_changed method in your App (or wherever). You may then be tempted to use this handler to validate the user input - the Input has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the Input from the DOM and then update the value attribute. This sort of fits with how you might approach it in a web app - create an &lt;input&gt; element and wire something up to its various handlers.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/textual-input-validation/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="Validating Input in Textual">
+  <meta property="og:description" content="Textual has a number of built in widgets to help capture user input. For text input, there is the standard Input widget. By default, this will let the user enter any characters that they wish.
+Whenever a new value is entered, textual will fire off an Input.Changed event, that you can handle with an on_input_changed method in your App (or wherever). You may then be tempted to use this handler to validate the user input - the Input has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the Input from the DOM and then update the value attribute. This sort of fits with how you might approach it in a web app - create an &lt;input&gt; element and wire something up to its various handlers.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-01-24T15:05:09+00:00">
+    <meta property="article:modified_time" content="2023-01-24T15:05:09+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Validating Input in Textual</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Jan 24, 2023
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          2 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p><a href="https://textual.textualize.io">Textual</a> has a number of built in widgets to help capture user input. For text input, there is the standard <a href="https://textual.textualize.io/widgets/input/"><code>Input</code></a> widget. By default, this will let the user enter any characters that they wish.</p>
+<p>Whenever a new value is entered, textual will fire off an <code>Input.Changed</code> event, that you can handle with an <code>on_input_changed</code> method in your <code>App</code> (or wherever). You may then be tempted to use this handler to validate the user input - the <code>Input</code> has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the <code>Input</code> from the DOM and then update the <code>value</code> attribute. This sort of fits with how you might approach it in a web app - create an <code>&lt;input&gt;</code> element and wire something up to its various handlers.</p>
+<p>However, in textual, updating the value from the event handler will trigger another changed event to fire. This isn’t really a problem as your input should now be valid so should pass through the handler without being modified but it can lead to some interesting race conditions if a user starts keyboard mashing, and there’s also the possibilty of a infinite loop if you’re not careful.</p>
+<h2 id="if-in-doubt-subclass">If in doubt: subclass</h2>
+<p>A pattern in textual that differs from web apps is the use of subclassing. This makes sense given that it’s easier to do this in python verus in HTML. (Does it even makes sense in HTML?) You could do something similar if you were using a frontend framework but that’s not a guarantee.</p>
+<p>If you look at the code for the demo app (run it with <code>python -m textual</code>) you’ll see that there are many subclasses of common widgets. These seem to have been done for CSS reasons: it’s as easy to create and specify a new class as it is to assign IDs to everything, plus you get some sematic ‘markup’ as a bonus.</p>
+<p>In our case, if we subclass the <code>Input</code> then we can override the default validation methods. For example, the following widget will only allow the user to enter digits:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NumbersInput</span>(Input):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">validate_value</span>(self, value):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#960050;background-color:#1e0010">“”</span><span style="color:#f92672">.</span>join(char <span style="color:#66d9ef">for</span> char <span style="color:#f92672">in</span> value <span style="color:#66d9ef">if</span> char <span style="color:#f92672">in</span> <span style="color:#e6db74">&#34;0123456789&#34;</span>)          
+</span></span></code></pre></div><h2 id="textual-patterns">Textual Patterns</h2>
+<p>As more apps get written, I’m sure more patterns and best practices will appear but I think ‘you probably want a subclass’ is a good one to begin with.</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>A BubbleTea App to View CloudWatch Logs // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A BubbleTea App to View CloudWatch Logs">
+  <meta name="twitter:description" content="My favourite way to view CloudWatch logs is with the awslogs tool. Unfortunately, when I last installed it with pipx it gave me errors about missing packages1, so I decided to do what any sane person would do and write a new version in a completely different programming language.
+I’m a big fan of python’s Textual library and TUIs in general, and I want 2024 to be my year of learning Go, so I’ve decided to look at using that along with BubbleTea.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/bubbleteacwlogs/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="A BubbleTea App to View CloudWatch Logs">
+  <meta property="og:description" content="My favourite way to view CloudWatch logs is with the awslogs tool. Unfortunately, when I last installed it with pipx it gave me errors about missing packages1, so I decided to do what any sane person would do and write a new version in a completely different programming language.
+I’m a big fan of python’s Textual library and TUIs in general, and I want 2024 to be my year of learning Go, so I’ve decided to look at using that along with BubbleTea.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-27T10:00:33+00:00">
+    <meta property="article:modified_time" content="2024-02-27T10:00:33+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">A BubbleTea App to View CloudWatch Logs</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Feb 27, 2024
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          9 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>My favourite way to view CloudWatch logs is with the <a href="https://github.com/jorgebastida/awslogs">awslogs</a> tool. Unfortunately, when I last installed it with <a href="https://github.com/pypa/pipx"><code>pipx</code></a> it gave me errors about missing packages<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, so I decided to do what any sane person would do and write a new version in a completely different programming language.</p>
+<p>I&rsquo;m a big fan of python&rsquo;s <a href="https://textual.textualize.io/">Textual</a> library and TUIs in general, and I want 2024 to be my year of learning Go, so I&rsquo;ve decided to look at using that along with <a href="https://github.com/charmbracelet/bubbletea">BubbleTea</a>.</p>
+<p>So firstly, we&rsquo;ll use the <a href="https://aws.amazon.com/sdk-for-go/">AWS SDK</a> to get a list of CloudWatch log groups:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// main.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/aws/aws-sdk-go-v2/config&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/aws/aws-sdk-go-v2/service/sts&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Hardcode the region for now</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">LoadDefaultConfig</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">TODO</span>(), <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">WithRegion</span>(<span style="color:#e6db74">&#34;eu-west-1&#34;</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to load configuration, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We&#39;ll use an STS client to check that the credentials are working</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sts_client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">sts_client</span>.<span style="color:#a6e22e">GetCallerIdentity</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">GetCallerIdentityInput</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;Bad AWS Credentials: %v &#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Now get the CloudWatch Log Groups</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use a paginator in case there are more than one</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">paginator</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewDescribeLogGroupsPaginator</span>(<span style="color:#a6e22e">client</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">DescribeLogGroupsInput</span>{})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">groups</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">HasMorePages</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">output</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">NextPage</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to list log groups, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">logGroup</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">output</span>.<span style="color:#a6e22e">LogGroups</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">groups</span> = append(<span style="color:#a6e22e">groups</span>, string(<span style="color:#f92672">*</span><span style="color:#a6e22e">logGroup</span>.<span style="color:#a6e22e">LogGroupName</span>))
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">logGroup</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">groups</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">logGroup</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The above will attempt to log into AWS and get all the log groups from the <code>eu-west-1</code> region. The SDK will read the config from the AWS config files, or from the environment variables, so those will need to be set up first.</p>
+<p>Next we&rsquo;ll add a sprinkling of BubbleTea to let the user pick which group they want to look at.</p>
+<p>BubbleTea uses the <a href="https://guide.elm-lang.org/architecture/">Elm Architecture</a> (for better or worse<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>), which means that we need a Model representing our application&rsquo;s state, an <code>Init</code> function to perform initialisation, an <code>Update</code> function that will mutate the model (if needed), and a <code>View</code> function that will draw the screen.</p>
+<p>The following is a basic example that displays our list of log groups using BubbleTea.</p>
+<p>First we need to define a model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">logGroups</span> []<span style="color:#66d9ef">string</span>{}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Then the <code>Init</code>, <code>Update</code> and <code>View</code> functions:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Init</span>() <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>) (<span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">View</span>() <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>, <span style="color:#e6db74">&#34;\n&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We then need to update our <code>main</code> function to use BubbleTea:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Create an empty model</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">model</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">model</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">LoadDefaultConfig</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">TODO</span>(), <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">WithRegion</span>(<span style="color:#e6db74">&#34;eu-west-1&#34;</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to load configuration, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sts_client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">sts_client</span>.<span style="color:#a6e22e">GetCallerIdentity</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">GetCallerIdentityInput</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">errorStyle</span>.<span style="color:#a6e22e">Render</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;Bad AWS Credentials: %v &#34;</span>, <span style="color:#a6e22e">err</span>)))
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">paginator</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewDescribeLogGroupsPaginator</span>(<span style="color:#a6e22e">client</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">DescribeLogGroupsInput</span>{})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">HasMorePages</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">output</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">NextPage</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to list log groups, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">logGroup</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">output</span>.<span style="color:#a6e22e">LogGroups</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">logGroups</span> = append(<span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">logGroups</span>, string(<span style="color:#f92672">*</span><span style="color:#a6e22e">logGroup</span>.<span style="color:#a6e22e">LogGroupName</span>))
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Now create our BubbleTea program</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">btProg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">NewProgram</span>(<span style="color:#a6e22e">model</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">btProg</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to start program, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This is a very simple example of a BubbleTea app <em><strong>BUT DON&rsquo;T RUN IT!</strong></em></p>
+<p>BubbleTea requires you to do most/every thing yourself and in this case, it requires you to provide a way to quit the application. If you run the above code, then the app will display the list of log groups but then sit there waiting for input. You&rsquo;ll have to kill it from a separate terminal window to make it quit. To provide a way to handle quitting, we need to change our <code>Update</code> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>) (<span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">msg</span>.(<span style="color:#66d9ef">type</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">KeyMsg</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">String</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;ctrl+c&#34;</span>, <span style="color:#e6db74">&#34;q&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Quit</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The <code>Update</code> function now checks the type of the message passed to it and, if it&rsquo;s a <code>KeyMsg</code>, it quits the app if the user pressed <code>q</code> or <code>ctrl-c</code>. Running this app will now print the list of log groups and wait for the user to quit the app.</p>
+<p>I&rsquo;m a big fan of Textual and it creates full screen apps, so let&rsquo;s do a little tweak to run this app full screen. Change the call to <code>NewProgram</code> to have the <code>tea.WithAltScreen()</code> option:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">btProg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">NewProgram</span>(<span style="color:#a6e22e">model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">WithAltScreen</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">btProg</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to start program, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span></code></pre></div><p>Now we want the ability to have a user select a log group to view. The bare-bones approach to this with BubbleTea is to alter our model to track the user&rsquo;s selection. We&rsquo;ll need to update the model to something like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">logGroups</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cursor</span>    <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And then we change the <code>Update</code> function to handle key presses for navigation (e.g. <code>up</code>, <code>down</code>, <code>j</code>, <code>k</code>, etc) and use the cursor field in the model to display an indicator in our <code>View</code> function. But that&rsquo;s a lot of work, and we&rsquo;ll need to handle things like reaching the top and bottom of the list, pagination if we have a lot of log groups, and various other display issues.</p>
+<p>Thankfully, BubbleTea comes with <a href="https://github.com/charmbracelet/bubbles/">Bubbles</a>. These are ready-made components that you can add to your app. For our use case, we&rsquo;ll want to use the <a href="https://github.com/charmbracelet/bubbles/?tab=readme-ov-file#list"><code>List</code></a> component.</p>
+<p>First we&rsquo;ll need to update the model to use the <code>list</code> bubble&rsquo;s internal model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logGroups</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Model</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The list&rsquo;s model expects item&rsquo;s to be added to it that match the <code>list.Item</code> interface, so let&rsquo;s define a type that does just that:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">item</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">i</span> <span style="color:#a6e22e">item</span>) <span style="color:#a6e22e">FilterValue</span>() <span style="color:#66d9ef">string</span> { <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span> }
+</span></span></code></pre></div><p>(The <code>list</code> bubble let&rsquo;s you filter the list, so the component needs to know what value to apply the filter to. At the moment, we&rsquo;re not supporting filtering, so we just return an empty string.)</p>
+<p>The rendering of each list item is handled by an <code>ItemDelegate</code>. We can use the <code>DefaultItemDelegate</code> that is provided by the <code>list</code> package but this requires that our list <code>item</code>&rsquo;s have a title and a description, which is more than what we need for our simple display, so we&rsquo;ll create our own delegate instead.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">itemDelegate</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">d</span> <span style="color:#a6e22e">itemDelegate</span>) <span style="color:#a6e22e">Height</span>() <span style="color:#66d9ef">int</span>                             { <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">d</span> <span style="color:#a6e22e">itemDelegate</span>) <span style="color:#a6e22e">Spacing</span>() <span style="color:#66d9ef">int</span>                            { <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">d</span> <span style="color:#a6e22e">itemDelegate</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">_</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Model</span>) <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span> { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">d</span> <span style="color:#a6e22e">itemDelegate</span>) <span style="color:#a6e22e">Render</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>, <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">index</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">listItem</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Item</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">listItem</span>.(<span style="color:#a6e22e">item</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">str</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d. %s&#34;</span>, <span style="color:#a6e22e">index</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">index</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Index</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">str</span> = <span style="color:#e6db74">&#34;&gt; &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">str</span>
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">str</span> = <span style="color:#e6db74">&#34;  &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">str</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprint</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">fn</span>(<span style="color:#a6e22e">str</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The <code>ItemDelegate</code> interface requires us to have <code>Height</code>, <code>Spacing</code>, <code>Render</code>, and <code>Update</code> methods on our struct. Here you can see that the <code>Render</code> method is doing most of the work. We check if the index of the selection is the same as the index of the item being rendered, and put a <code>&gt;</code> indicator if so.</p>
+<p>We then need to change our <code>main</code> function to construct the list of <code>list.Item</code>s and to set up the model to use our delegate:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Create the model with an empty list of items that uses our delegate.</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// The `20` is the list width and the `10` is the list height. Note that this</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// height is the total height of the list bubble, which includes help text,</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// title, filter text, and the items.</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">model</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">model</span>{<span style="color:#a6e22e">logGroups</span>: <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">New</span>([]<span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Item</span>{}, <span style="color:#a6e22e">itemDelegate</span>{}, <span style="color:#ae81ff">20</span>, <span style="color:#ae81ff">10</span>)}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">LoadDefaultConfig</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">TODO</span>(), <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">WithRegion</span>(<span style="color:#e6db74">&#34;eu-west-1&#34;</span>))
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to load configuration, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">sts_client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">sts_client</span>.<span style="color:#a6e22e">GetCallerIdentity</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(), <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sts</span>.<span style="color:#a6e22e">GetCallerIdentityInput</span>{})
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">errorStyle</span>.<span style="color:#a6e22e">Render</span>(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;Bad AWS Credentials: %v &#34;</span>, <span style="color:#a6e22e">err</span>)))
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewFromConfig</span>(<span style="color:#a6e22e">config</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">paginator</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">NewDescribeLogGroupsPaginator</span>(<span style="color:#a6e22e">client</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cloudwatchlogs</span>.<span style="color:#a6e22e">DescribeLogGroupsInput</span>{})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Create a slice of items</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">groups</span> <span style="color:#f92672">:=</span> []<span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Item</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">HasMorePages</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">output</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">paginator</span>.<span style="color:#a6e22e">NextPage</span>(<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to list log groups, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">logGroup</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">output</span>.<span style="color:#a6e22e">LogGroups</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Add the items to the list</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">groups</span> = append(<span style="color:#a6e22e">groups</span>, <span style="color:#a6e22e">item</span>(string(<span style="color:#f92672">*</span><span style="color:#a6e22e">logGroup</span>.<span style="color:#a6e22e">LogGroupName</span>)))
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Update the model</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">SetItems</span>(<span style="color:#a6e22e">groups</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">btProg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">NewProgram</span>(<span style="color:#a6e22e">model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">WithAltScreen</span>())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">btProg</span>.<span style="color:#a6e22e">Run</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;failed to start program, %v&#34;</span>, <span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We then need to change our <code>Update</code> method. We need to handle what we need to handle (quitting etc) and then pass the message to the <code>list</code>&rsquo;s model to do its updates:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>) (<span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cmd</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">msg</span>.(<span style="color:#66d9ef">type</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">KeyMsg</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">String</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;q&#34;</span>, <span style="color:#e6db74">&#34;ctrl+c&#34;</span>:
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Quit</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>, <span style="color:#a6e22e">cmd</span> = <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">cmd</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>If we run the app, we&rsquo;ll get a full screen with a tiny list. You&rsquo;ll also see the help text, and you can use <code>/</code> to turn on the filter function and filter the items in the list. One bug is that if we try and filter the list to any items that contain the letter <code>q</code> then the app will quit. This is because our <code>Update</code> function checks for the key first, and quits the app before we call <code>Update</code> on the list.</p>
+<p>To fix this, we need to check the state of the <code>list</code>&rsquo;s filtering feature:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>) (<span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cmd</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">msg</span>.(<span style="color:#66d9ef">type</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">KeyMsg</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// If we&#39;re not filtering then we can add our own logic</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> !(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">FilterState</span>() <span style="color:#f92672">==</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Filtering</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">String</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;q&#34;</span>, <span style="color:#e6db74">&#34;ctrl+c&#34;</span>:
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Quit</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>, <span style="color:#a6e22e">cmd</span> = <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">cmd</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now we have a way to get our list and display it but we&rsquo;re wasting a lot of screen space by limiting ourselves to only 10 lines. So let&rsquo;s look at using the whole screen.</p>
+<p>Whenever the terminal is resized, BubbleTea will send your app a <code>WindowSizeMsg</code> message. So we need to handle this in our <code>Update</code> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#a6e22e">model</span>) <span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Msg</span>) (<span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Model</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> (
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cmd</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Cmd</span>
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">msg</span>.(<span style="color:#66d9ef">type</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">KeyMsg</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> !(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">FilterState</span>() <span style="color:#f92672">==</span> <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">Filtering</span>) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">String</span>() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;q&#34;</span>, <span style="color:#e6db74">&#34;ctrl+c&#34;</span>:
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">Quit</span>
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Handle resizing</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tea</span>.<span style="color:#a6e22e">WindowSizeMsg</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">SetWidth</span>(<span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">Width</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">SetHeight</span>(<span style="color:#a6e22e">msg</span>.<span style="color:#a6e22e">Height</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>, <span style="color:#a6e22e">cmd</span> = <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">logGroups</span>.<span style="color:#a6e22e">Update</span>(<span style="color:#a6e22e">msg</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">cmd</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Now when the terminal is resized, our list will adapt.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Turns out this is easily fixed with <code>pipx inject awslogs setuptools</code> but let&rsquo;s not let that spoil things.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>The Elm architecture makes sense - it&rsquo;s a nice way of adding some rigour to UIs. One <em>very key</em> difference between Elm and BubbleTea, however, is that Elm has a whole browser sitting underneath it. That means it&rsquo;s very easy to attach handlers etc to DOM elements and have them pass messages to Elm. BubbleTea does not have this and the user is responsible for everything that the browser would do. You&rsquo;ll need to handle tabbing between elements, &ldquo;focus&rdquo; of controls, and even things like hit detection for mouse events. That&rsquo;s a lot of work.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

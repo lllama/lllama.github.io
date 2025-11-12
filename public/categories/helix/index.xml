@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Helix on Lllama&#39;s blog</title>
+    <link>http://localhost:1313/categories/helix/</link>
+    <description>Recent content in Helix on Lllama&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Mon, 17 Apr 2023 08:43:21 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/helix/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Helix for vim users</title>
+      <link>http://localhost:1313/posts/helix-for-vim-users/</link>
+      <pubDate>Mon, 17 Apr 2023 08:43:21 +0100</pubDate>
+      <guid>http://localhost:1313/posts/helix-for-vim-users/</guid>
+      <description>&lt;h1 id=&#34;update&#34;&gt;Update&lt;/h1&gt;&#xA;&lt;p&gt;Once again, it appears that what I really want is to just change my Vim colourscheme, rather than switching to a new editor. Though I&amp;rsquo;ll admit that I&amp;rsquo;m liking Zed a lot these days.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;Periodically, I have a go at using an editor other than vim. This normally results in me realising that I just needed a change of vim colour scheme but I’ve just discovered &lt;a href=&#34;https://helix-editor.com/&#34;&gt;Helix&lt;/a&gt; which might be just enough like vim for me to stick around.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

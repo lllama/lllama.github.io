@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>Sanic Custom Route Parameters // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Sanic Custom Route Parameters">
+  <meta name="twitter:description" content="Sanic supports path parameters like the majority of web frameworks. It supports a number of built-in types but you can define your own.
+Something like this from Adam on Discord:
+import re from typing import NamedTuple DIMENSIONS_PATTERN = re.compile(r&#34;(?P&lt;width&gt;\d&#43;)x(?P&lt;height&gt;\d&#43;)&#34;) class Dimensions(NamedTuple): width: int height: int def _extract_dimensions(value: str) -&gt; Dimensions: if match := DIMENSIONS_PATTERN.match(value): return Dimensions(**{k: int(v) for k, v in match.groupdict().items()}) raise ValueError(&#34;Not proper dimensions format&#34;) app.router.register_pattern( &#34;dimensions&#34;, _extract_dimensions, DIMENSIONS_PATTERN ) @app.get(&#34;/&lt;dimensions:dimensions&gt;/colors/&lt;hex:ext&gt;&#34;) async def handler( request: Request, dimensions: Dimensions, hex: str, ext: str ): return json({&#34;dimensions&#34;: dimensions, &#34;hex&#34;: hex, &#34;ext&#34;: ext})">
+
+    <meta property="og:url" content="http://localhost:1313/posts/sanic-custom-parameters/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="Sanic Custom Route Parameters">
+  <meta property="og:description" content="Sanic supports path parameters like the majority of web frameworks. It supports a number of built-in types but you can define your own.
+Something like this from Adam on Discord:
+import re from typing import NamedTuple DIMENSIONS_PATTERN = re.compile(r&#34;(?P&lt;width&gt;\d&#43;)x(?P&lt;height&gt;\d&#43;)&#34;) class Dimensions(NamedTuple): width: int height: int def _extract_dimensions(value: str) -&gt; Dimensions: if match := DIMENSIONS_PATTERN.match(value): return Dimensions(**{k: int(v) for k, v in match.groupdict().items()}) raise ValueError(&#34;Not proper dimensions format&#34;) app.router.register_pattern( &#34;dimensions&#34;, _extract_dimensions, DIMENSIONS_PATTERN ) @app.get(&#34;/&lt;dimensions:dimensions&gt;/colors/&lt;hex:ext&gt;&#34;) async def handler( request: Request, dimensions: Dimensions, hex: str, ext: str ): return json({&#34;dimensions&#34;: dimensions, &#34;hex&#34;: hex, &#34;ext&#34;: ext})">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-01-23T12:11:33+00:00">
+    <meta property="article:modified_time" content="2023-01-23T12:11:33+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Sanic Custom Route Parameters</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Jan 23, 2023
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          1 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>Sanic supports path parameters like the majority of web frameworks. It supports a number of <a href="https://sanic.dev/en/guide/basics/routing.html#path-parameters">built-in types</a> but you can define your own.</p>
+<p>Something like this from Adam on Discord:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> re
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> typing <span style="color:#f92672">import</span> NamedTuple
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DIMENSIONS_PATTERN <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>compile(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;(?P&lt;width&gt;\d+)x(?P&lt;height&gt;\d+)&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Dimensions</span>(NamedTuple):
+</span></span><span style="display:flex;"><span>    width: int
+</span></span><span style="display:flex;"><span>    height: int
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_extract_dimensions</span>(value: str) <span style="color:#f92672">-&gt;</span> Dimensions:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">match</span> <span style="color:#f92672">:=</span> DIMENSIONS_PATTERN<span style="color:#f92672">.</span><span style="color:#66d9ef">match</span>(value):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Dimensions(<span style="color:#f92672">**</span>{k: int(v) <span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> <span style="color:#66d9ef">match</span><span style="color:#f92672">.</span>groupdict()<span style="color:#f92672">.</span>items()})
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;Not proper dimensions format&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app<span style="color:#f92672">.</span>router<span style="color:#f92672">.</span>register_pattern(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;dimensions&#34;</span>, _extract_dimensions, DIMENSIONS_PATTERN
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@app.get</span>(<span style="color:#e6db74">&#34;/&lt;dimensions:dimensions&gt;/colors/&lt;hex:ext&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handler</span>(
+</span></span><span style="display:flex;"><span>    request: Request, dimensions: Dimensions, hex: str, ext: str
+</span></span><span style="display:flex;"><span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> json({<span style="color:#e6db74">&#34;dimensions&#34;</span>: dimensions, <span style="color:#e6db74">&#34;hex&#34;</span>: hex, <span style="color:#e6db74">&#34;ext&#34;</span>: ext})
+</span></span></code></pre></div>
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

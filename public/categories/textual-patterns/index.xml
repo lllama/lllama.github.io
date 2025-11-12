@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Textual-Patterns on Lllama&#39;s blog</title>
+    <link>http://localhost:1313/categories/textual-patterns/</link>
+    <description>Recent content in Textual-Patterns on Lllama&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Tue, 24 Jan 2023 15:05:09 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/textual-patterns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Validating Input in Textual</title>
+      <link>http://localhost:1313/posts/textual-input-validation/</link>
+      <pubDate>Tue, 24 Jan 2023 15:05:09 +0000</pubDate>
+      <guid>http://localhost:1313/posts/textual-input-validation/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://textual.textualize.io&#34;&gt;Textual&lt;/a&gt; has a number of built in widgets to help capture user input. For text input, there is the standard &lt;a href=&#34;https://textual.textualize.io/widgets/input/&#34;&gt;&lt;code&gt;Input&lt;/code&gt;&lt;/a&gt; widget. By default, this will let the user enter any characters that they wish.&lt;/p&gt;&#xA;&lt;p&gt;Whenever a new value is entered, textual will fire off an &lt;code&gt;Input.Changed&lt;/code&gt; event, that you can handle with an &lt;code&gt;on_input_changed&lt;/code&gt; method in your &lt;code&gt;App&lt;/code&gt; (or wherever). You may then be tempted to use this handler to validate the user input - the &lt;code&gt;Input&lt;/code&gt; has a reactive variable but there’s no easy way to wire something up to an instance’s methods. So you validate the new value, then grab the &lt;code&gt;Input&lt;/code&gt; from the DOM and then update the &lt;code&gt;value&lt;/code&gt; attribute. This sort of fits with how you might approach it in a web app - create an &lt;code&gt;&amp;lt;input&amp;gt;&lt;/code&gt; element and wire something up to its various handlers.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

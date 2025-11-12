@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>sanic-kit // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="sanic-kit">
+  <meta name="twitter:description" content="HTMx has been a revelation for writing web apps. I’d previously used my preferred DERP stack (Django, Ember, REST framework, postgresql) which produced nice enough apps but took a lot of effort and had lots of redundant code: Postgres tables needed to be Django models, which needed to be DRF serialisers, which needed Ember Data models, and then finally rendered to the DOM.
+Writing with htmx meant I could have most of the shiny but I only need to produce the html on the server.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/sanic-kit/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="sanic-kit">
+  <meta property="og:description" content="HTMx has been a revelation for writing web apps. I’d previously used my preferred DERP stack (Django, Ember, REST framework, postgresql) which produced nice enough apps but took a lot of effort and had lots of redundant code: Postgres tables needed to be Django models, which needed to be DRF serialisers, which needed Ember Data models, and then finally rendered to the DOM.
+Writing with htmx meant I could have most of the shiny but I only need to produce the html on the server.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-04-17T20:35:00+01:00">
+    <meta property="article:modified_time" content="2023-04-17T20:35:00+01:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">sanic-kit</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Apr 17, 2023
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          2 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p><a href="https://htmx.org/">HTMx</a> has been a revelation for writing web apps. I’d previously used my preferred DERP stack (Django, Ember, REST framework, postgresql) which produced nice enough apps but took a lot of effort and had  lots of redundant code: Postgres tables needed to be Django models, which needed to be DRF serialisers, which needed Ember Data models, and then finally rendered to the DOM.</p>
+<p>Writing with htmx meant I could have most of the shiny but I only need to produce the html on the server.</p>
+<p>htmx’s emphasis on just returning html for me thinking about a simpler way to actually write apps. Having used Django, FastAPI and Starlette, there is a lot of boilerplate required to wire a url up to a template. So I had an attempt at implementing file path routing for Starlette and came up with <a href="https://lllama.github.io/dark-star/">Dark Star</a>. It worked but didn’t feel that ergonomic.</p>
+<p>I was then introduced to <a href="https://sanic.dev/">Sanic</a>. Sanic has a Flask-like syntax and is fully async. It has an extensions module that makes using jinja templates super easy and many other features that make for a brilliant developer experience. One of its biggest wins is that it ships with a production-grade server: the server you dev on is the server you use in production.</p>
+<p>For a different project I was looking at <a href="https://svelte.dev/">Svelte</a> which led me to <a href="https://kit.svelte.dev/">Svelte Kit</a>. Svelte Kit allows you to write a whole web app in Svelte, and it makes use of file path routing. So I started work on <a href="https://github.com/lllama/sanic-kit">Sanic-kit</a>. It copies Svelte Kit as much as makes sense to and lets you keep your handler code right next to your templates. When you build your app it translates everything to a “proper” Sanic app (that follows the practices from the <a href="https://sanicbook.com/">Sanic Book</a> as much as possible) and runs it with Sanic’s excellent server.</p>
+<p>It’s early days so far but the approach seems sound so I’ll post more updates here as it progresses.</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

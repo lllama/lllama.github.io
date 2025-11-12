@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>Textual Screen Transitions // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Textual Screen Transitions">
+  <meta name="twitter:description" content="Textual brings a little bit of the web to the terminal. Apps have a DOM that is composed of widgets, and layout and styling is all handled with CSS.
+Apps can also be made up of multiple Screens, which could be thought of as separate URLs or pages within a web-app. With this in mind, I started wondering about whether it would be possible to animate a transition between two different screens.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/textual-screen-transitions/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="Textual Screen Transitions">
+  <meta property="og:description" content="Textual brings a little bit of the web to the terminal. Apps have a DOM that is composed of widgets, and layout and styling is all handled with CSS.
+Apps can also be made up of multiple Screens, which could be thought of as separate URLs or pages within a web-app. With this in mind, I started wondering about whether it would be possible to animate a transition between two different screens.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-01-26T11:49:38+00:00">
+    <meta property="article:modified_time" content="2023-01-26T11:49:38+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Textual Screen Transitions</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Jan 26, 2023
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          3 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p><a href="https://textual.textualize.io">Textual</a> brings a little bit of the web to the terminal. Apps have a DOM that is composed of widgets, and layout and styling is all handled with CSS.</p>
+<p>Apps can also be made up of multiple <a href="https://textual.textualize.io/guide/screens/">Screens</a>, which could be thought of as separate URLs or pages within a web-app. With this in mind, I started wondering about whether it would be possible to animate a transition between two different screens.</p>
+<p>When I write a Single Page Application (SPA) on the web, I normally reach for <a href="http://emberjs.com">Ember</a>. When I first started using it, it was one of the, if not the only, framework that had its own CLI to manage building and developing. It also makes use of a lot of convensions, which lends itself to a nice addon community.</p>
+<p>One of the most popular addons is <a href="https://ember-animation.github.io/liquid-fire/">Liquid Fire</a>. Liquid Fire lets you add animations to elements and to also transition between pages of your app.</p>
+<p>I decided to see whether something similar could be done with Textual. When moving between different screens, you either <a href="https://textual.textualize.io/guide/screens/#push-screen">push</a> a screen onto the stack, or <a href="https://textual.textualize.io/guide/screens/#switch-screen">switch</a> out the current screen for a new one. My idea was to override these methods of an app and use them to perform an animation. For the animation itself, I decided to try and replicate how Liquid Fire does it and to use the <a href="https://css-tricks.com/animating-layouts-with-the-flip-technique/">FLIP technique</a>. The basic idea is to capture the current screen, then capture the destination screen, and then animate between the two.</p>
+<p>Textual is full of lots of very helpful functions and features. One in particular is the ability to take screenshots, and this is what I used to capture the two screens. When an <code>App</code> changes screen, we first take a screenshot. In particular, we use the <code>export_text</code> method to get the text of the screen. We can also ask for all of the escape codes to be included, which means we’ll get all the colours and formatting. We then change to the new screen and take another screenshot.</p>
+<p>Once we have the two copies, we then need to find a way to transition between the two. To do this, we use another Screen of our own. We create the new screen, pass it our two copies, and then tell it what transition to use. Once the screen is created, we kick off an <code>animate</code> call that animates a <a href="https://textual.textualize.io/guide/reactivity/"><code>reactive</code></a> variable on our screen. The transition is driven by this, and once it finishes, we pop our screen off the stack, which will leave us with our destination screen. If the transition worked as expected, the two screens will look identical and the app will be ready for the user to interact with.</p>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
