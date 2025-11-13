@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-gb">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>Let&#39;s Write a Datastar Plugin // Lllama&#39;s blog</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.152.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="John Doe" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.5b1fcc8902588589c4767187402a3c29f8b8d7a6fdef6d9f8f77045bb0d14fee.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Let&#39;s Write a Datastar Plugin">
+  <meta name="twitter:description" content="Let’s build a datastar plugin. All datastar functionality is implemented as plugins. The new RC6 release included a revised plugin API, so we’ll use this. The API is not (yet) documented, but we can still use it to build our plugin. The plan is to update this document when I spot any mistakes, so take all of this with a pinch of salt.
+Data Bind Attr Our new plugin will combine the functionality of two of the core plugins: data-bind and data-attr. The data-bind plugin sets up a two-way binding between an element’s value and a datastar signal. When used on an input element, and changes made by the user will be reflected in the signal, and changes to the signal will be reflected in the element’s value.">
+
+    <meta property="og:url" content="http://localhost:1313/posts/data-bind-attr/">
+  <meta property="og:site_name" content="Lllama&#39;s blog">
+  <meta property="og:title" content="Let&#39;s Write a Datastar Plugin">
+  <meta property="og:description" content="Let’s build a datastar plugin. All datastar functionality is implemented as plugins. The new RC6 release included a revised plugin API, so we’ll use this. The API is not (yet) documented, but we can still use it to build our plugin. The plan is to update this document when I spot any mistakes, so take all of this with a pinch of salt.
+Data Bind Attr Our new plugin will combine the functionality of two of the core plugins: data-bind and data-attr. The data-bind plugin sets up a two-way binding between an element’s value and a datastar signal. When used on an input element, and changes made by the user will be reflected in the signal, and changes to the signal will be reflected in the element’s value.">
+  <meta property="og:locale" content="en_gb">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-11-12T22:31:41+00:00">
+    <meta property="article:modified_time" content="2025-11-12T22:31:41+00:00">
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="John Doe" /></a>
+      <span class="app-header-title">Lllama&#39;s blog</span>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Let&#39;s Write a Datastar Plugin</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Nov 12, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          4 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>Let&rsquo;s build a <a href="https://data-star.dev">datastar</a> plugin. All datastar
+functionality is implemented as plugins. The new RC6 release included a revised
+plugin API, so we&rsquo;ll use this. The API is not (yet) documented, but we can still
+use it to build our plugin. The plan is to update this document when I spot any
+mistakes, so take all of this with a pinch of salt.</p>
+<h2 id="data-bind-attr">Data Bind Attr</h2>
+<p>Our new plugin will combine the functionality of two of the core plugins:
+<code>data-bind</code> and <code>data-attr</code>. The <code>data-bind</code> plugin sets up a two-way binding
+between an element&rsquo;s value and a datastar signal. When used on an input element,
+and changes made by the user will be reflected in the signal, and changes to the
+signal will be reflected in the element&rsquo;s value.</p>
+<p>The <code>data-attr</code> plugin sets up a one-way binding between an element&rsquo;s attribute
+and a datastar signal. When used on an element, the defined signal&rsquo;s value will
+be reflected in the defined attribute.</p>
+<p>For our <code>data-bind-attr</code> plugin, we want a two-way binding between an arbitrary
+attribute and a datastar signal. When used on an element, the defined signal&rsquo;s
+value will be reflected in the defined attribute and any changes to the
+attribute will be reflected in the signal.</p>
+<p>Why is this useful? Web components. Most web component libraries can define
+properties which are populated from attribute values. Changes to the properties
+will also update the attribute value. So our plugin will let us drive web
+components via datastar signals but also allow the web component to update the
+signal.</p>
+<h3 id="the-plugin-api">The Plugin API</h3>
+<p>Let&rsquo;s have a look at some existing plugins to get an idea of how the plugin API
+works. We&rsquo;ll use the <code>data-attr</code> plugin as an example.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">attribute</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@engine&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">effect</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@engine/signals&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">attribute</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;attr&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">requirement</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;must&#39;</span> },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">returnsValue</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">apply</span>({ <span style="color:#a6e22e">el</span>, <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">rx</span> }) {
+</span></span><span style="display:flex;"><span>  ...
+</span></span></code></pre></div><p>Here we see that we&rsquo;re importing <code>attribute</code>. Datastar has attribute, action and watcher plugins. Attributes are put on elements in <code>data-*</code> attributes. Actions let us do things like issue requests. And watcher plugins will react to events.</p>
+<p>We then see various config settings being passed to <code>attribute</code>, along with the
+<code>apply</code> function. Let&rsquo;s grep all the attribute config options and see what we can use.</p>
+<ul>
+<li><code>name</code></li>
+<li><code>requirement</code></li>
+<li><code>returnsValue</code></li>
+<li><code>argNames</code></li>
+</ul>
+<h4 id="name">name</h4>
+<p>Simple enough: the name of the plugin.</p>
+<h4 id="argnames">argNames</h4>
+<p>The names of arguments made available to the plugin. For example, with the
+<code>data-on</code> plugin, <code>argNames</code> includes <code>evt</code> which represents the event object.
+The plugin can then use <code>evt.target</code> etc.</p>
+<h4 id="requirement">requirement</h4>
+<p>The <code>requirement</code> argument is one of the following values:</p>
+<ul>
+<li><code>allowed</code> - The attribute must be present on the element.</li>
+<li><code>must</code> - The attribute must be present on the element.</li>
+<li><code>denied</code> - The attribute is optional.</li>
+<li><code>exclusive</code> - The attribute must not be present on the element.</li>
+</ul>
+<p>The argument can also take an object with optional <code>key</code> and <code>value</code> properties.
+One or both of these properties must be present. A <code>key</code> is the string that
+comes after the colon in the <code>data-*</code> attribute. E.g. in <code>data-on:click</code>, then
+<code>click</code> is the key. The <code>value</code> is the value of the attribute. Both <code>key</code> and
+<code>value</code> can be set as <code>must</code>, <code>denied</code>, or <code>exclusive</code>. <code>must</code> means that a
+value must be present. <code>denied</code> means no value is allowed. And <code>exclusive</code> means
+that if a key is set then no value is allowed, or vice versa.</p>
+<p>If the requirement is defined as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">requirement</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">key</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;denied&#39;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Datastar will throw an error if a key is supplied.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">requirement</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">key</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;exclusive&#39;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Datastar will throw an error if a value is supplied (or if no key is defined).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">requirement</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">key</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;denied&#39;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Datastar will throw an error if a key is supplied.</p>
+<p>Rather than defining the <code>requirement</code> argument as an object, you can also define it as a string. For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">requirement</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;denied&#39;</span>
+</span></span></code></pre></div><p>In this case, the requirement will apply to both the <code>key</code> and <code>value</code> properties. So <code>denied</code> means neither is allowed, <code>must</code> means both are required, and <code>exclusive</code> means only one is allowed.</p>
+<h4 id="returnsvalue">returnsValue</h4>
+<p>Finally we have <code>returnsValue</code> which is a boolean indicating whether the plugin
+returns a value or not. At a high level, setting it to <code>false</code> means that the
+plugin will be performing some action or calculations, but datastar does not
+need to get involved after the action is complete. More importantly, it also
+means that the attribute&rsquo;s value does not need to be treated as reactive.</p>
+<p>If you want to use a reactive expression in the attribute&rsquo;s value, then you need
+to set <code>returnsValue</code> to <code>true</code>. This in turn will mean that the context value
+passed to your <code>apply</code> function will have an <code>rx</code> property that can be used to
+get the value of the expression.</p>
+<h3 id="setup">Setup</h3>
+<p>We&rsquo;ll use typescript, so let&rsquo;s set up a new project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tsc --init
+</span></span></code></pre></div><p>We now have a <code>tsconfig.json</code> file.</p>
+<h3></h3>
+
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
