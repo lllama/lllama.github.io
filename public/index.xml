@@ -6,8 +6,15 @@
     <description>Recent content on Lllama&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 11 Nov 2025 21:00:33 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 12 Nov 2025 22:31:41 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Let&#39;s Write a Datastar Plugin</title>
+      <link>http://localhost:1313/posts/data-bind-attr/</link>
+      <pubDate>Wed, 12 Nov 2025 22:31:41 +0000</pubDate>
+      <guid>http://localhost:1313/posts/data-bind-attr/</guid>
+      <description>&lt;p&gt;Let&amp;rsquo;s build a &lt;a href=&#34;https://data-star.dev&#34;&gt;datastar&lt;/a&gt; plugin. All datastar&#xA;functionality is implemented as plugins. The new RC6 release included a revised&#xA;plugin API, so we&amp;rsquo;ll use this. The API is not (yet) documented, but we can still&#xA;use it to build our plugin. The plan is to update this document when I spot any&#xA;mistakes, so take all of this with a pinch of salt.&lt;/p&gt;&#xA;&lt;h2 id=&#34;data-bind-attr&#34;&gt;Data Bind Attr&lt;/h2&gt;&#xA;&lt;p&gt;Our new plugin will combine the functionality of two of the core plugins:&#xA;&lt;code&gt;data-bind&lt;/code&gt; and &lt;code&gt;data-attr&lt;/code&gt;. The &lt;code&gt;data-bind&lt;/code&gt; plugin sets up a two-way binding&#xA;between an element&amp;rsquo;s value and a datastar signal. When used on an input element,&#xA;and changes made by the user will be reflected in the signal, and changes to the&#xA;signal will be reflected in the element&amp;rsquo;s value.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>A collection of Datastar tips and tricks</title>
       <link>http://localhost:1313/posts/datastartips/</link>
@@ -23,6 +30,20 @@
       <description>&lt;p&gt;My favourite way to view CloudWatch logs is with the &lt;a href=&#34;https://github.com/jorgebastida/awslogs&#34;&gt;awslogs&lt;/a&gt; tool. Unfortunately, when I last installed it with &lt;a href=&#34;https://github.com/pypa/pipx&#34;&gt;&lt;code&gt;pipx&lt;/code&gt;&lt;/a&gt; it gave me errors about missing packages&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, so I decided to do what any sane person would do and write a new version in a completely different programming language.&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;m a big fan of python&amp;rsquo;s &lt;a href=&#34;https://textual.textualize.io/&#34;&gt;Textual&lt;/a&gt; library and TUIs in general, and I want 2024 to be my year of learning Go, so I&amp;rsquo;ve decided to look at using that along with &lt;a href=&#34;https://github.com/charmbracelet/bubbletea&#34;&gt;BubbleTea&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>Exploring Burp Project Files</title>
+      <link>http://localhost:1313/posts/exploring-burp-project-files/</link>
+      <pubDate>Thu, 28 Sep 2023 20:52:54 +0100</pubDate>
+      <guid>http://localhost:1313/posts/exploring-burp-project-files/</guid>
+      <description>&lt;p&gt;It’s been a while since I’ve done any web app testing. A long while. Last time I used &lt;a href=&#34;https://portswigger.net/burp/pro&#34;&gt;Burp&lt;/a&gt;, there was no such thing as project files. There was a state file, which was some strange psuedo-xml file format but the new project files look like they contain more information. A &lt;em&gt;lot&lt;/em&gt; more information. So I’ve decided to have a prod and see whether I can extract any useful information from them.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Textual Subprocesses</title>
+      <link>http://localhost:1313/posts/textual-subprocesses/</link>
+      <pubDate>Thu, 04 May 2023 23:14:38 +0100</pubDate>
+      <guid>http://localhost:1313/posts/textual-subprocesses/</guid>
+      <description>&lt;p&gt;My latest &lt;a href=&#34;http://textual.textualize.io&#34;&gt;Textual&lt;/a&gt; app runs a couple of executables as subproccesses. However, running the second one causes the TUI to become very laggy and only some inputs were being processed. It turns out that the subprocess was reading from stdin and therefore pinching some of Textual’s input.&lt;/p&gt;&#xA;&lt;p&gt;Performance could be restored by setting the subprocess’s &lt;code&gt;stdin&lt;/code&gt; to &lt;code&gt;subprocess.PIPE&lt;/code&gt; (or the &lt;code&gt;asyncio&lt;/code&gt; equivalent).&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>sanic-kit</title>
       <link>http://localhost:1313/posts/sanic-kit/</link>
       <pubDate>Mon, 17 Apr 2023 20:35:00 +0100</pubDate>
@@ -35,6 +56,13 @@
       <pubDate>Mon, 17 Apr 2023 08:43:21 +0100</pubDate>
       <guid>http://localhost:1313/posts/helix-for-vim-users/</guid>
       <description>&lt;h1 id=&#34;update&#34;&gt;Update&lt;/h1&gt;&#xA;&lt;p&gt;Once again, it appears that what I really want is to just change my Vim colourscheme, rather than switching to a new editor. Though I&amp;rsquo;ll admit that I&amp;rsquo;m liking Zed a lot these days.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;Periodically, I have a go at using an editor other than vim. This normally results in me realising that I just needed a change of vim colour scheme but I’ve just discovered &lt;a href=&#34;https://helix-editor.com/&#34;&gt;Helix&lt;/a&gt; which might be just enough like vim for me to stick around.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>textual widget lifecycles</title>
+      <link>http://localhost:1313/posts/textual-lifecycles-/</link>
+      <pubDate>Thu, 23 Feb 2023 11:34:47 +0000</pubDate>
+      <guid>http://localhost:1313/posts/textual-lifecycles-/</guid>
+      <description></description>
     </item>
     <item>
       <title>Textual in WSL</title>

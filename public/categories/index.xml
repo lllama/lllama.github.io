@@ -6,13 +6,48 @@
     <description>Recent content in Categories on Lllama&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-gb</language>
-    <lastBuildDate>Mon, 17 Apr 2023 20:35:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 28 Sep 2023 20:52:54 +0100</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Burp</title>
+      <link>http://localhost:1313/categories/burp/</link>
+      <pubDate>Thu, 28 Sep 2023 20:52:54 +0100</pubDate>
+      <guid>http://localhost:1313/categories/burp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ImHex</title>
+      <link>http://localhost:1313/categories/imhex/</link>
+      <pubDate>Thu, 28 Sep 2023 20:52:54 +0100</pubDate>
+      <guid>http://localhost:1313/categories/imhex/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reversing</title>
+      <link>http://localhost:1313/categories/reversing/</link>
+      <pubDate>Thu, 28 Sep 2023 20:52:54 +0100</pubDate>
+      <guid>http://localhost:1313/categories/reversing/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Python</title>
       <link>http://localhost:1313/categories/python/</link>
-      <pubDate>Mon, 17 Apr 2023 20:35:00 +0100</pubDate>
+      <pubDate>Thu, 04 May 2023 23:14:38 +0100</pubDate>
       <guid>http://localhost:1313/categories/python/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Textual</title>
+      <link>http://localhost:1313/categories/textual/</link>
+      <pubDate>Thu, 04 May 2023 23:14:38 +0100</pubDate>
+      <guid>http://localhost:1313/categories/textual/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Til</title>
+      <link>http://localhost:1313/categories/til/</link>
+      <pubDate>Thu, 04 May 2023 23:14:38 +0100</pubDate>
+      <guid>http://localhost:1313/categories/til/</guid>
       <description></description>
     </item>
     <item>
@@ -37,24 +72,10 @@
       <description></description>
     </item>
     <item>
-      <title>Til</title>
-      <link>http://localhost:1313/categories/til/</link>
-      <pubDate>Mon, 17 Apr 2023 08:43:21 +0100</pubDate>
-      <guid>http://localhost:1313/categories/til/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Vim</title>
       <link>http://localhost:1313/categories/vim/</link>
       <pubDate>Mon, 17 Apr 2023 08:43:21 +0100</pubDate>
       <guid>http://localhost:1313/categories/vim/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Textual</title>
-      <link>http://localhost:1313/categories/textual/</link>
-      <pubDate>Fri, 27 Jan 2023 11:52:07 +0000</pubDate>
-      <guid>http://localhost:1313/categories/textual/</guid>
       <description></description>
     </item>
     <item>

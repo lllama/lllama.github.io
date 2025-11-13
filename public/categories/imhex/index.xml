@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ImHex on Lllama&#39;s blog</title>
+    <link>http://localhost:1313/categories/imhex/</link>
+    <description>Recent content in ImHex on Lllama&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-gb</language>
+    <lastBuildDate>Thu, 28 Sep 2023 20:52:54 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/imhex/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Exploring Burp Project Files</title>
+      <link>http://localhost:1313/posts/exploring-burp-project-files/</link>
+      <pubDate>Thu, 28 Sep 2023 20:52:54 +0100</pubDate>
+      <guid>http://localhost:1313/posts/exploring-burp-project-files/</guid>
+      <description>&lt;p&gt;It’s been a while since I’ve done any web app testing. A long while. Last time I used &lt;a href=&#34;https://portswigger.net/burp/pro&#34;&gt;Burp&lt;/a&gt;, there was no such thing as project files. There was a state file, which was some strange psuedo-xml file format but the new project files look like they contain more information. A &lt;em&gt;lot&lt;/em&gt; more information. So I’ve decided to have a prod and see whether I can extract any useful information from them.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

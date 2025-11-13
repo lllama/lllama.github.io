@@ -2,23 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/posts/datastartips/</loc>
-    <lastmod>2025-11-11T21:00:33+00:00</lastmod>
+    <loc>http://localhost:1313/posts/data-bind-attr/</loc>
+    <lastmod>2025-11-12T22:31:41+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2025-11-11T21:00:33+00:00</lastmod>
+    <lastmod>2025-11-12T22:31:41+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-11-12T22:31:41+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/datastartips/</loc>
     <lastmod>2025-11-11T21:00:33+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/bubbleteacwlogs/</loc>
     <lastmod>2024-02-27T10:00:33+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/categories/burp/</loc>
+    <lastmod>2023-09-28T20:52:54+01:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/categories/</loc>
-    <lastmod>2023-04-17T20:35:00+01:00</lastmod>
+    <lastmod>2023-09-28T20:52:54+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/exploring-burp-project-files/</loc>
+    <lastmod>2023-09-28T20:52:54+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/imhex/</loc>
+    <lastmod>2023-09-28T20:52:54+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/reversing/</loc>
+    <lastmod>2023-09-28T20:52:54+01:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/python/</loc>
-    <lastmod>2023-04-17T20:35:00+01:00</lastmod>
+    <lastmod>2023-05-04T23:14:38+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/textual/</loc>
+    <lastmod>2023-05-04T23:14:38+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/textual-subprocesses/</loc>
+    <lastmod>2023-05-04T23:14:38+01:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/til/</loc>
+    <lastmod>2023-05-04T23:14:38+01:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/categories/sanic/</loc>
     <lastmod>2023-04-17T20:35:00+01:00</lastmod>
@@ -35,14 +59,11 @@
     <loc>http://localhost:1313/posts/helix-for-vim-users/</loc>
     <lastmod>2023-04-17T08:43:21+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/til/</loc>
-    <lastmod>2023-04-17T08:43:21+01:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/categories/vim/</loc>
     <lastmod>2023-04-17T08:43:21+01:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/textual/</loc>
-    <lastmod>2023-01-27T11:52:07+00:00</lastmod>
+    <loc>http://localhost:1313/posts/textual-lifecycles-/</loc>
+    <lastmod>2023-02-23T11:34:47+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/textual-in-wsl/</loc>
     <lastmod>2023-01-27T11:52:07+00:00</lastmod>
