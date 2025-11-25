@@ -243,7 +243,7 @@ key and a value. In our case, we <em>don&rsquo;t</em> set <code>returnsValue</co
 won&rsquo;t be using the <code>rx()</code> function. Rather, we&rsquo;ll be accessing the signals
 directly with <code>getPath()</code> and <code>mergePaths()</code>.</p><p>We&rsquo;ll then use <code>modifyCasing</code> to convert the key using the standard casing modifiers
 (NOTE - unfortunately, <code>modifyCasing</code> is not part of the public plugin API, so
-this usage is prone to breaking.)</p><p>Our plugin will then need the following pieces of code:</p><ul><li>A simple getter function for getting the attribute value.</li><li>Code to make sure that the signal exists, and create it if it doesn&rsquo;t.</li><li>A <code>syncSignal</code> function that reads the value of the attribute and updates the
+this usage is prone to breaking.)</p><p>Our plugin will also need the following pieces of code:</p><ul><li>A simple getter function for getting the attribute value.</li><li>Code to make sure that the signal exists, and create it if it doesn&rsquo;t.</li><li>A <code>syncSignal</code> function that reads the value of the attribute and updates the
 signal value.</li><li>A <code>syncAttr</code> function that does the opposite and gets the signal value and
 updates the attribute&rsquo;s value.</li><li>An <code>update</code> function that is used to update the signal value when the
 attribute value changes by handling our observer&rsquo;s subscription.</li><li>A <code>MutationObserver</code> that watches the attributes for changes.</li><li>Code to use <code>effect</code> to register our plugin for signal updates and to run
