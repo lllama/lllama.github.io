@@ -3,7 +3,7 @@ Data Bind Attr Our new plugin will combine the functionality of two of the core 
 Data Bind Attr Our new plugin will combine the functionality of two of the core plugins: data-bind and data-attr. The data-bind plugin sets up a two-way binding between an element’s value and a datastar signal. When used on an input element, and changes made by the user will be reflected in the signal, and changes to the signal will be reflected in the element’s value."><meta property="og:locale" content="en_gb"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-11-12T22:31:41+00:00"><meta property="article:modified_time" content="2025-11-12T22:31:41+00:00"></head><body><header class=app-header><a href=/><img class=app-header-avatar src=/avatar.jpg alt="John Doe"></a>
 <span class=app-header-title>Lllama's blog</span><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vehicula turpis sit amet elit pretium.</p></header><main class=app-container><article class=post><header class=post-header><h1 class=post-title>Let's Write a Datastar Plugin!</h1><div class=post-meta><div><svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
 Nov 12, 2025</div><div><svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-12 min read</div></div></header><div class=post-content><p>Let&rsquo;s build a <a href=https://data-star.dev>datastar</a> plugin. All datastar
+13 min read</div></div></header><div class=post-content><p>Let&rsquo;s build a <a href=https://data-star.dev>datastar</a> plugin. All datastar
 functionality is implemented as plugins. The new RC6 release included a revised
 plugin API, so we&rsquo;ll use this. The API is not (yet) documented, but we can still
 use it to build our plugin. The plan is to update this document when I spot any
@@ -241,9 +241,9 @@ plugin. It should be used as follows:</p><pre tabindex=0><code>data-bind-attr:at
 a signal name or path. We set the <code>requirement</code> to <code>'must'</code> as we want both a
 key and a value. In our case, we <em>don&rsquo;t</em> set <code>returnsValue</code> to <code>true</code> because we
 won&rsquo;t be using the <code>rx()</code> function. Rather, we&rsquo;ll be accessing the signals
-directly with <code>getPath()</code> and <code>mergePaths()</code>.</p><p>We&rsquo;ll then use <code>modifyCasing</code> to convert the key using the standard casing modifiers
-(NOTE - unfortunately, <code>modifyCasing</code> is not part of the public plugin API, so
-this usage is prone to breaking.)</p><p>Our plugin will also need the following pieces of code:</p><ul><li>A simple getter function for getting the attribute value.</li><li>Code to make sure that the signal exists, and create it if it doesn&rsquo;t.</li><li>A <code>syncSignal</code> function that reads the value of the attribute and updates the
+directly with <code>getPath()</code> and <code>mergePaths()</code>.</p><p>Ideally, we&rsquo;d then use <code>modifyCasing</code> to convert the key using the standard
+casing modifiers. Sadly, <code>modifyCasing</code> is not part of the public plugin API, so
+we can&rsquo;t do this for now.</p><p>Our plugin will also need the following pieces of code:</p><ul><li>A simple getter function for getting the attribute value.</li><li>Code to make sure that the signal exists, and create it if it doesn&rsquo;t.</li><li>A <code>syncSignal</code> function that reads the value of the attribute and updates the
 signal value.</li><li>A <code>syncAttr</code> function that does the opposite and gets the signal value and
 updates the attribute&rsquo;s value.</li><li>An <code>update</code> function that is used to update the signal value when the
 attribute value changes by handling our observer&rsquo;s subscription.</li><li>A <code>MutationObserver</code> that watches the attributes for changes.</li><li>Code to use <code>effect</code> to register our plugin for signal updates and to run
@@ -258,8 +258,10 @@ disconnecting the observer.</li></ul><p>Here&rsquo;s the full code:</p><div clas
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;bind-attr&#39;</span>,
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>requirement</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;must&#39;</span>,
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>apply</span>({ <span style=color:#a6e22e>el</span>, <span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>mods</span>, <span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>error</span> }) {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// Apply case modifications - note: not part of the public API.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>attributeName</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>modifyCasing</span>(<span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>mods</span>)
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Ideally we would apply case modifications.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Sadly, `modifyCasing` is not part of the public API.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// const attributeName = modifyCasing(key, mods)
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>attributeName</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>key</span>
 </span></span><span style=display:flex><span>    
 </span></span><span style=display:flex><span>    <span style=color:#75715e>// Simple getter
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>get</span> <span style=color:#f92672>=</span> (<span style=color:#a6e22e>el</span>: <span style=color:#66d9ef>any</span>, <span style=color:#66d9ef>type</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>string</span>) <span style=color:#f92672>=&gt;</span>
@@ -321,4 +323,31 @@ disconnecting the observer.</li></ul><p>Here&rsquo;s the full code:</p><div clas
 </span></span><span style=display:flex><span>      <span style=color:#a6e22e>cleanup</span>()
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>}})
-</span></span></code></pre></div></div><div class=post-footer></div></article></main></body></html>
+</span></span></code></pre></div><h2 id=adding-our-plugin-to-our-application>Adding our plugin to our application</h2><p>Our plugin is currently written in Typescript and is importing functions etc as
+if it was part of the main datastar bundle. What we need to do is convert our
+typescript to javascript and then import the plugin and register with datastar.</p><p>We can use <code>esbuild</code> to convert the typescript to javascript:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>npx esbuild &lt;path to bindAttr.ts&gt;
+</span></span></code></pre></div><p>We can then create a basic HTML file to test our plugin:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span><span style=color:#75715e>&lt;!DOCTYPE html&gt;</span>
+</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>html</span> <span style=color:#a6e22e>lang</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;en&#34;</span>&gt;
+</span></span><span style=display:flex><span>	&lt;<span style=color:#f92672>head</span>&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>meta</span> <span style=color:#a6e22e>charset</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;UTF-8&#34;</span> /&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>title</span>&gt;DataStar bind-attr Example&lt;/<span style=color:#f92672>title</span>&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;importmap&#34;</span>&gt;
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#e6db74>&#34;imports&#34;</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>				<span style=color:#e6db74>&#34;datastar&#34;</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js&#34;</span>,
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		&lt;/<span style=color:#f92672>script</span>&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;module&#34;</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/bindAttr.js&#34;</span>&gt;&lt;/<span style=color:#f92672>script</span>&gt;		
+</span></span><span style=display:flex><span>	&lt;/<span style=color:#f92672>head</span>&gt;
+</span></span><span style=display:flex><span>	&lt;<span style=color:#f92672>body</span>&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>input</span> <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;range&#34;</span> <span style=color:#a6e22e>data-bind</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;count&#34;</span> <span style=color:#a6e22e>min</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0&#34;</span> <span style=color:#a6e22e>max</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;100&#34;</span> <span style=color:#a6e22e>step</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1&#34;</span> <span style=color:#a6e22e>value</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;50&#34;</span> /&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>data-text</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;$count&#34;</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+</span></span><span style=display:flex><span>		&lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>data-bind-attr:count</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;count&#34;</span>&gt;&lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>	&lt;/<span style=color:#f92672>body</span>&gt;
+</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>html</span>&gt;
+</span></span></code></pre></div><p>Use <a href=https://caddyserver.com>Caddy</a> or your favorite web server to serve the
+HTML and JS file, and then use devtools to inspect the element&rsquo;s attribute as
+you adjust the range slider.</p><p>Note - if you also include datastar in its own script tag, then you may well
+cause the browser to hang.</p><h2 id=final-thoughts>Final thoughts</h2><p>The plugin API is nicely written and simple to use. The existing plugins are a
+great set of examples that should give you an idea of what&rsquo;s possible -
+something like <code>@clip</code> at one end, and the whole of Rocket at the other.</p></div><div class=post-footer></div></article></main></body></html>
