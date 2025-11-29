@@ -43,7 +43,7 @@ key and/or value defined on the attribute. A <code>key</code> is the string that
 after the colon in the <code>data-*</code> attribute. E.g. in <code>data-on:click</code>, then <code>click</code>
 is the key. The <code>value</code> is the value of the attribute. E.g. in
 <code>data-text="$foo"</code>, the value is <code>$foo</code>. The <code>requirement</code> argument takes one of
-the following values:</p><ul><li><code>allowed</code> - The attribute must be present on the element.</li><li><code>must</code> - The attribute must be present on the element.</li><li><code>denied</code> - The attribute is optional.</li><li><code>exclusive</code> - The attribute must not be present on the element.</li></ul><p>The argument can also take an object with optional <code>key</code> and <code>value</code> properties.
+the following values:</p><ul><li><code>allowed</code> - The attribute can be present on the element.</li><li><code>must</code> - The attribute must be present on the element.</li><li><code>denied</code> - The attribute is optional.</li><li><code>exclusive</code> - The attribute must not be present on the element.</li></ul><p>The argument can also take an object with optional <code>key</code> and <code>value</code> properties.
 One or both of these properties must be present. Both <code>key</code> and <code>value</code> can be
 set as <code>must</code>, <code>denied</code>, or <code>exclusive</code>. <code>must</code> means that a value must be
 present. <code>denied</code> means no value is allowed. And <code>exclusive</code> means that if a key
@@ -54,9 +54,12 @@ is set then no value is allowed, or vice versa.</p><p>If the requirement is defi
 </span></span><span style=display:flex><span>  <span style=color:#a6e22e>key</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;exclusive&#39;</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>Datastar will throw an error if a value is supplied (or if no key is defined).</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>requirement</span><span style=color:#f92672>:</span> {
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>key</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;denied&#39;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>key</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;must&#39;</span>
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>Datastar will throw an error if a key is supplied.</p><p>Rather than defining the <code>requirement</code> argument as an object, you can also define it as a string. For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>requirement</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;denied&#39;</span>
+</span></span></code></pre></div><p>Datastar will throw an error if a key is not supplied.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>requirement</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>key</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;allowed&#39;</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>A key can be supplied.</p><p>Rather than defining the <code>requirement</code> argument as an object, you can also define it as a string. For example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>requirement</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;denied&#39;</span>
 </span></span></code></pre></div><p>In this case, the requirement will apply to both the <code>key</code> and <code>value</code>
 properties. So <code>denied</code> means neither is allowed, <code>must</code> means both are
 required, and <code>exclusive</code> means only one is allowed.</p><h4 id=returnsvalue>returnsValue</h4><p>Finally we have <code>returnsValue</code> which is a boolean indicating whether the plugin
