@@ -7,7 +7,7 @@
 &lt;li&gt;make sure &lt;code&gt;COLORTERM&lt;/code&gt; is set to &lt;code&gt;truecolor&lt;/code&gt; in your environment.&lt;/li&gt;
 &lt;/ol&gt;</description></item><item><title>Sanic Custom Route Parameters</title><link>https://lllama.github.io/posts/sanic-custom-parameters/</link><pubDate>Mon, 23 Jan 2023 12:11:33 +0000</pubDate><guid>https://lllama.github.io/posts/sanic-custom-parameters/</guid><description>&lt;p&gt;Sanic supports path parameters like the majority of web frameworks. It supports a number of &lt;a href="https://sanic.dev/en/guide/basics/routing.html#path-parameters"&gt;built-in types&lt;/a&gt; but you can define your own.&lt;/p&gt;
 &lt;p&gt;Something like this from Adam on Discord:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; re
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; re
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; typing &lt;span style="color:#f92672"&gt;import&lt;/span&gt; NamedTuple
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
